@@ -1,0 +1,49 @@
+{
+	"appID": "b9b122fd4f084d8cbe46217ef411fbd6",
+	"shortName": "com.partytrollstudios.unearthed",
+	"title": "Unearthed",
+	"studio": {
+		"name": "Party Troll Studios",
+		"domain": "theshirtstoreonline.com",
+		"stagingDomain": "theshirtstoreonline.com"
+	},
+	"supportedOrientations": [
+		"landscape"
+	],
+	"description": "Unearthed description",
+	"icon": "resources/images/icons/icon-72.png",
+	"splash": {
+		"autoHide": true,
+		"portrait480": "resources/splash/portrait480.png",
+		"portrait960": "resources/splash/portrait960.png",
+		"portrait1024": "resources/splash/portrait1024.png",
+		"portrait1136": "resources/splash/portrait1136.png",
+		"portrait2048": "resources/splash/portrait2048.png",
+		"landscape768": "resources/splash/landscape768.png",
+		"landscape1536": "resources/splash/landscape1536.png"
+	},
+	"android": {
+		"versionCode": 0.1,
+		"icons": {
+			"36": "resources/icons/android36.png",
+			"48": "resources/icons/android48.png",
+			"72": "resources/icons/android72.png",
+			"96": "resources/icons/android96.png"
+		}
+	},
+	"ios": {
+		"bundleID": "com.partytrollstudios.unearthed",
+		"appleID": "",
+		"developer": "Joseph Halko",
+		"provision": "partytroll.mobileprovision",
+		"version": "0.1.8",
+		"icons": {
+			"57": "resources/icons/ios57.png",
+			"72": "resources/icons/ios72.png",
+			"114": "resources/icons/ios114.png",
+			"144": "resources/icons/ios144.png",
+			"renderGloss": false
+		}
+	},
+	"sdkVersion": "release-0.1.33"
+}
