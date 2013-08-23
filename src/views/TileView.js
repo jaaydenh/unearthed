@@ -118,8 +118,10 @@ exports = Class(ui.View, function (supr) {
 	
 	};
 	this.activateTile = function() {
-
+		this._tileModel.setVisible(true);
 		this._tileModel.activateTile();
+		this._tileModel.updateGame();
+		this._game.unlock();
 	};
 
 	this.emitSleepingZParticles = function() {
@@ -193,7 +195,7 @@ exports = Class(ui.View, function (supr) {
 			title: this._tileType,
 			items: [
 				{image: 'resources/images/gametiles/' + this._tileType + '.png', height: gameConstants.TILE_SIZE, width: gameConstants.TILE_SIZE, align: 'center'},
-				{text: this._tileModel._description},
+				{text: this._tileModel.getDescription()},
 				{item: 'Ok', action: bind(this, '_showTile')}
 			],
 			showTransitionMethod: menuConstants.transitionMethod.FADE,

@@ -3,7 +3,6 @@ import src.sounds.soundManager as soundManager;
 import src.util.Data as Data;
 import src.constants.gameConstants as gameConstants;
 import event.Emitter as Emitter;
-import src.game.QuickSelectGameView as QuickSelectGameView;
 import animate;
 import src.util.Utility as Utility;
 import src.models.RuneModel as RuneModel;
@@ -20,11 +19,15 @@ exports = Class(ui.View, function (supr) {
 
 	this.init = function (opts) {
 
+		this._setDefaults();
+
 		opts = merge(opts, {
 			width:	gameConstants.TILE_SIZE,
 			height: gameConstants.TILE_SIZE
 		});
 
+		this._id = opts.id;
+		this._description = opts.description;
 		this._tileType = opts.tileType;
 		this._game = opts.game;
 		
@@ -34,8 +37,6 @@ exports = Class(ui.View, function (supr) {
 
 		supr(this, 'init', [opts]);
 
-		this._setDefaults();
-
 		if (this._tileType == 'disabled') {
 			this._disabled = true;
 		} else {
@@ -43,12 +44,6 @@ exports = Class(ui.View, function (supr) {
 		}
 
 		this.setTileRules();
-		
-		if (this._sleepInDay == true && this._game.isDaytime == true) {
-			this._tileType = this._sleepingtile;
-			this._setDefaults();
-			this.setTileRules();
-		}
 	};
 
 	this._setDefaults = function() {
@@ -203,7 +198,7 @@ exports = Class(ui.View, function (supr) {
 		  this._description = 'Needed to unlock the travelers portals';
 		  break;
 		case "ogre":
-		  this._id = 114;
+		  /*this._id = 114;
 		  this._dangerous = true;
 		  this._stayVisible = false;
 		  this._causeDamage = true;
@@ -211,7 +206,7 @@ exports = Class(ui.View, function (supr) {
 		  this._sleepingtile = 'ogre_sleeping';
 		  this._damage = 1;
 		  this._creature = true;
-		  this._description = 'Big, ugly and they hurt';
+		  this._description = 'Big, ugly and they hurt';*/
 		break;
 		case "rock":
 		  this._id = 115;	
@@ -252,14 +247,6 @@ exports = Class(ui.View, function (supr) {
 		  this._id = 121;
 		  this._description = 'Worth 10 gold coins';
 		break;
-		case "ogre_sleeping":
-		  this._id = 122;
-		  this._description = 'Ogres love to sleep during the day but loud noises may wake them up and cause them to hit anything in sight';
-		  this._wakingtile = 'ogre';  
-		  this._sleeping = true;
-		  this._creature = true;
-		  this._dangerous = true;
-		break;
 		case "singingflower":
 		  this._id = 123;
 		  this._description = 'A very noisy flower which has been known to wakeup nearby sleeping monsters';
@@ -298,20 +285,30 @@ exports = Class(ui.View, function (supr) {
 		return this._visible;
 	}
 	
-	this.activateTile = function () {
-		this._visible = true;
-		this.processTileRules();
+	this.setVisible = function(visible) {
+		this._visible = visible;
+	}
 
+	this.getDescription = function() {
+		return this._description;
+	}
+
+	this.activateTile = function () {
+		//this._visible = true;
+		this.processTileRules();
+		//this._game.unlock();
+	};
+	
+	this.updateGame = function() {
 		this._game.checkGoblinsVisible();
 		this._game.checkHintTileStates();
 		this._game.checkStatus();
 
-		if (this._stayVisible === false && this._game.isDaytime == false) {
+		if (this._stayVisible === false && this._game.isDaytime() == false) {
 			this.resetTile();
-		}			
-		this._game.unlock();
-	};
-	
+		}	
+	}
+
 	this.moveToTile = function(tileNum, replaceTile) {
 		this.emit('MoveToTile', {tileNum: tileNum, replaceTile: replaceTile});
 	}
@@ -337,13 +334,13 @@ exports = Class(ui.View, function (supr) {
 			}))
 		}
 		
-		if (this._store == true) {
+		/*if (this._store == true) {
 			this._game.storeView = new StoreView({
 				game: this._game
 			})
 			this._game.addSubview(this._game.storeView);
 			this._game.storeView.show();
-		}
+		}*/
 
 		if (this._campfire == true) {
 
@@ -444,9 +441,6 @@ exports = Class(ui.View, function (supr) {
 		//}
 
 		if (this._trap == true) {
-			//this._game.quickSelectGameView = new QuickSelectGameView({
-			//	game: this._game, difficulty: 2
-			//})
 			this._game.trapGameView = new TrapGameView({
 				game: this._game
 			})
@@ -454,7 +448,7 @@ exports = Class(ui.View, function (supr) {
 			this._game.trapGameView.show();
 		}	
 
-		if (this._causeDamage == true) {
+		/*if (this._causeDamage == true) {
 
 			//this.sound.play('orchit');
 			soundManager.play('orc_hit');
@@ -472,7 +466,7 @@ exports = Class(ui.View, function (supr) {
 				this._game.loseMessage = "You have lost all your hearts!";
 			}
 
-		}
+		}*/
 		
 		/*if (this._changeToNight == true) {
 			gameScreen._gui_frame.setImage(gameScreen.gui_night_img);
@@ -565,9 +559,4 @@ exports = Class(ui.View, function (supr) {
 		}
 		this._visible = false;
 	};
-
-	this.setIsDaytime = function(value) {
-		this._isDaytime = value;
-	};
-
 });

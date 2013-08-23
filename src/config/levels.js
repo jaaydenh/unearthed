@@ -43,7 +43,7 @@ exports["forest"] = [
 		// tile deck, real deck for level 1
 		[r,r,r,r,r,r,r,r,d,r,r,r,r,r,r,r,r,f,f,f,f,f,f,c,c,c,c,c,c,c,c,si,si,si,o,o,o,g,g],
 		// debug tile deck for level 1
-		//[r,r,r,r,r,r,r,r,r,r,si,si,tr,tr,tr,tr,tr,tr,tr,tr,tr,tr,tr,tr,tr,tr,tr,tr,tr,tr,tr,o,g,g,p,d],
+		//[r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,si,si,st,st,st,st,st,o,o,o,o,o,o,o,o,o,o,g,g,p,d],
 		[ca,ca,ca,ca,ca]
 	], [
 		{

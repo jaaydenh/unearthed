@@ -158,6 +158,7 @@ exports = Class(DialogBackgroundView, function (supr) {
 	};
 
 	this.setup = function(opts) {
+		this.goalTileViewPool.releaseAllViews();
 		this._dialogView.title.setText('Level ' + opts.levelNum);
 		//this._dialogView.updateOpts({
 		//	title: 'sfdsfsdds ' + opts.levelNum

@@ -24,6 +24,8 @@ import src.models.RuneModel as RuneModel;
 import src.views.RuneView as RuneView;
 import ui.ParticleEngine as ParticleEngine;
 import src.views.LevelStartView as LevelStartView;
+import src.models.OgreModel as OgreModel;
+import src.models.StoreModel as StoreModel;
 
 var game_on = false,
 	lang = 'en',
@@ -330,7 +332,7 @@ exports = Class(ui.View, function (supr) {
 		//this.gameID = ++gameID;
 		this.won = false;
 		this.lose = false;
-		this.isDaytime = data.isDaytime;
+		this._isDaytime = data.isDaytime;
 		this.level = opts.level;
 		this.levelNum = data.levelNumber;
 		this.levelTotal = opts.levelTotal;
@@ -342,7 +344,7 @@ exports = Class(ui.View, function (supr) {
 		this._playerModel.updateGold();
 
 
-		if (this.isDaytime === true) {
+		if (this._isDaytime === true) {
 			//this._gui_frame.setImage(this.gui_day_img);
 			this._gameStatusModel.setGameTime('day');
 		} else {
@@ -352,7 +354,6 @@ exports = Class(ui.View, function (supr) {
 
 		// Display level introduction screen
 		this.levelStartView.setup({levelNum: this.levelNum, goalText: this.goalText, goalTiles: this.goalTiles});
-		//this.levelStartView.style.visible = true;
 		this.addSubview(this.levelStartView);
 		this.levelStartView.show();
 
@@ -381,12 +382,27 @@ exports = Class(ui.View, function (supr) {
 			//var tile = new Tile(tileType, {
 		//		game: this
 		//	});
+		var tileModel;
+			if (tileType == 'ogre') {
+	 			tileModel = new OgreModel( 
+				{
+					game: this,
+					tileType: tileType
+				});
+			} else if (tileType == 'store') {
+				tileModel = new StoreModel( 
+				{
+					game: this,
+					tileType: tileType
+				});
+			} else {
+				tileModel = new TileModel( 
+				{
+					game: this,
+					tileType: tileType
+				});
+			}
 
-			var tileModel = new TileModel( 
-			{
-				game: this,
-				tileType: tileType
-			});
 
 			this._gameModel.addTileToDeck(tileModel);
 		}))
@@ -441,6 +457,10 @@ exports = Class(ui.View, function (supr) {
 
 		//this._levelGoalView.show();
 	};
+
+	this.isDaytime = function() {
+		return this._isDaytime;
+	}
 
 	this.addRune = function(runeType) {
 
