@@ -5,6 +5,7 @@ import ui.TextView as TextView;
 
 import src.config.levels as levels;
 import src.util.Data as Data;
+import src.views.DiscoveryView as DiscoveryView;
 
 /**
  * Win module
@@ -246,6 +247,14 @@ exports = Class(View, function(supr) {
 			.now({ opacity: 0 })
 			.then(cb);
 		}
+	};
+
+	this.showDiscoveryView = function() {
+		this.discoveryView = new DiscoveryView({
+			special: this.specialsFound[0]
+		})
+		this.addSubview(this.discoveryView);
+		this.discoveryView.show();
 	};
 
 	this.resetView = function() {

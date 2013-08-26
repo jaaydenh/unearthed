@@ -11,10 +11,10 @@ exports = Class(TileModel, function (supr) {
 	this.init = function (opts) {
 
 		opts = merge(opts, {
-			game: opts.game,
+			gameModel: opts.gameModel,
+			gameView: opts.gaemView,
 			id: 112,
-			description: 'stores randomly appear and are a great place to use all that hard earned gold',
-
+			description: 'stores randomly appear and are a great place to use all that hard earned gold'
 		});
 
 		supr(this, 'init', [opts]);
@@ -22,10 +22,10 @@ exports = Class(TileModel, function (supr) {
 
 	this.activateTile = function () {
 
-		this._game.storeView = new StoreView({
-			game: this._game
+		this._gameView.storeView = new StoreView({
+			game: this._gameView
 		})
-		this._game.addSubview(this._game.storeView);
-		this._game.storeView.show();
+		this._gameView.addSubview(this._gameView.storeView);
+		this._gameView.storeView.show();
 	}
 });

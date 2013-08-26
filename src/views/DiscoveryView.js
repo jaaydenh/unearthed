@@ -21,14 +21,14 @@ exports = Class(DialogBackgroundView, function (supr) {
 
 		this.canHandleEvents(true);
 
-		this.game = opts.game;
+		//this.game = opts.game;
 		this._special = opts.special;
 
 		this._dialogView = new BoxDialogView({
 			superview: this._dialogContainerView,
 			x: 20,
 			y: 20,
-			width: 785,
+			width: gameConstants.GAME_WIDTH - 40,
 			height: gameConstants.GAME_HEIGHT - 40,
 			title: 'Discovery',
 			closeCB: opts.closeCB ? bind(this, 'hide', opts.closeCB) : false,

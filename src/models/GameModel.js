@@ -1,6 +1,14 @@
 import event.Emitter as Emitter;
 import src.util.Utility as Utility;
 import src.constants.gameConstants as gameConstants;
+import src.models.OgreModel as OgreModel;
+import src.models.StoreModel as StoreModel;
+import src.models.NoisyFlowerModel as NoisyFlowerModel;
+import src.models.DogModel as DogModel;
+import src.models.RabbitModel as RabbitModel;
+import src.models.SunModel as SunModel;
+import src.models.MoonModel as MoonModel;
+import src.models.TileModel as TileModel;
 
 exports = Class(Emitter, function (supr) {
 	
@@ -8,6 +16,8 @@ exports = Class(Emitter, function (supr) {
 		
 		this.gridWidth = opts.gridWidth;
 		this.gridHeight = opts.gridHeight;
+		this._isDaytime = opts.isDaytime;
+		this._gameView = opts.gameView;
 
 		supr(this, 'init', [opts]);
 
@@ -15,6 +25,22 @@ exports = Class(Emitter, function (supr) {
 		this._visibleGoblins = 0;
 		this._runeGrid = [];
 	};
+
+	this.isDaytime = function() {
+		return this._isDaytime;
+	}
+
+	this.setDayTime = function(isDaytime) {
+
+		this._isDaytime = isDaytime;
+
+		if (this._isDaytime === true) {
+			this._gameView._gameStatusModel.setGameTime('day');
+		} else {
+			this._gameView._gameStatusModel.setGameTime('night');
+		}
+	}
+
 	this.getVisibleGoblins = function() {
 		return this._visibleGoblins;
 	}
@@ -30,8 +56,69 @@ exports = Class(Emitter, function (supr) {
 	this.removeTopTileFromDeck = function() {
 		return this._tileDeck.pop();
 	}
-	this.addTileToDeck = function(tile) {
-		this._tileDeck.push(tile);
+	this.addTileToDeck = function(tileType) {
+
+		var tileModel;
+		
+		if (tileType == 'dog') {
+			tileModel = new DogModel( 
+			{
+				gameModel: this,
+				gameView: this._gameView,
+				tileType: tileType
+			});
+		} else if (tileType == 'singingflower') {
+			tileModel = new NoisyFlowerModel( 
+			{
+				gameModel: this,
+				gameView: this._gameView,
+				tileType: tileType
+			});
+		} else if (tileType == 'ogre') {
+ 			tileModel = new OgreModel( 
+			{
+				gameModel: this,
+				gameView: this._gameView,
+				tileType: tileType
+			});
+		} else if (tileType == 'store') {
+			tileModel = new StoreModel( 
+			{
+				gameModel: this,
+				gameView: this._gameView,
+				tileType: tileType
+			});
+		} else if (tileType == 'rabbit') {
+			tileModel = new RabbitModel( 
+			{
+				gameModel: this,
+				gameView: this._gameView,
+				tileType: tileType
+			});
+		} else if (tileType == 'sun') {
+			tileModel = new SunModel( 
+			{
+				gameModel: this,
+				gameView: this._gameView,
+				tileType: tileType
+			});
+		} else if (tileType == 'moon') {
+			tileModel = new MoonModel( 
+			{
+				gameModel: this,
+				gameView: this._gameView,
+				tileType: tileType
+			});
+		} else {
+			tileModel = new TileModel( 
+			{
+				gameModel: this,
+				gameView: this._gameView,
+				tileType: tileType
+			});
+		}
+
+		this._tileDeck.push(tileModel);
 	}
 
 	this.placeRune = function(rune, tileNumber) {
@@ -102,7 +189,7 @@ exports = Class(Emitter, function (supr) {
 	}
 
 	this.shuffleDeck = function() {
-	    var tmp, current, top = this.tileDeck.length;
+	    var tmp, current, top = this._tileDeck.length;
 
 	    if(top) while(--top) {
 	    	current = Math.floor(Math.random() * (top + 1));

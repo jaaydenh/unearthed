@@ -41,7 +41,7 @@ exports["forest"] = [
 			backgroundImage: 'dirtstonebackground'
 		},
 		// tile deck, real deck for level 1
-		[r,r,r,r,r,r,r,r,d,r,r,r,r,r,r,r,r,f,f,f,f,f,f,c,c,c,c,c,c,c,c,si,si,si,o,o,o,g,g],
+		[r,r,r,r,r,r,r,r,r,d,r,r,r,r,r,r,r,f,f,f,f,f,l,c,c,c,c,c,c,c,c,si,si,si,o,o,o,g,g],
 		// debug tile deck for level 1
 		//[r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,si,si,st,st,st,st,st,o,o,o,o,o,o,o,o,o,o,g,g,p,d],
 		[ca,ca,ca,ca,ca]
@@ -50,7 +50,7 @@ exports["forest"] = [
 			levelNumber: 2,
 			isDaytime: true,
 			keysToWin: 0, 
-			goalTiles: [c,c,c,c],
+			goalTiles: [c,c,c,c,d],
 			goalText: 'The goblins have carelessly dropped gold all over the forest. Collect 4 gold coins',
 			pathsNeeded: 0,
 			hearts: 3,
@@ -81,6 +81,22 @@ exports["forest"] = [
 		{
 			levelNumber: 4,
 			isDaytime: true,
+			keysToWin: 0,
+			goalTiles: [dg,d],
+			goalText: 'Your dog has been captured by goblins. Rescue your dog.',
+			pathsNeeded: 0,
+			hearts: 3,
+			gridWidth: 6,
+			gridHeight: 5,
+			startingRunes: 3,
+			backgroundImage: 'swampbackground'
+		},
+		[c,c,c,c,r,r,r,r,r,r,r,r,r,r,r,r,c,c,c,c,c,c,si,si,f,f,o,o,o,sf,sf,ca,ca,st,l,l,g,g,d,dg],
+		[ca,ca,ca,ca,ca]
+	], [
+		{
+			levelNumber: 5,
+			isDaytime: true,
 			keysToWin: 1,
 			goalTiles: [d],
 			goalText: 'The goblins have discovered you in their forest. Find the traveler\'s portal before 3 goblins find you',
@@ -95,7 +111,7 @@ exports["forest"] = [
 		[ca,ca,ca,ca,ca]
 	], [
 		{
-			levelNumber: 5,
+			levelNumber: 6,
 			isDaytime: true,
 			keysToWin: 3,
 			goalTiles: [d],
@@ -111,41 +127,25 @@ exports["forest"] = [
 		[ca,ca,ca,ca,ca]
 	], [
 		{
-			levelNumber: 6,
-			isDaytime: true,
-			keysToWin: 0,
-			goalTiles: [dg],
-			goalText: 'Your dog has been captured by goblins. Rescue your dog.',
-			pathsNeeded: 0,
-			hearts: 3,
-			gridWidth: 6,
-			gridHeight: 5,
-			startingRunes: 3,
-			backgroundImage: 'swampbackground'
-		},
-		[c,c,c,c,r,r,r,r,r,r,r,r,r,c,c,c,c,si,si,f,f,o,o,o,sf,sf,ca,ca,ca,st,l,l,tr,tr,g,g,p,p,p,d],
-		[ca,ca,ca,ca,ca]
-	], [
-		{
 			levelNumber: 7,
 			isDaytime: true,
 			keysToWin: 0,
-			goalTiles: [d],
-			goalText: 'Find the traveler\'s portal',
-			pathsNeeded: 3,
+			goalTiles: [d,rb],
+			goalText: 'Rescue the lost rabbit',
+			pathsNeeded: 0,
 			hearts: 4,
 			gridWidth: 6,
 			gridHeight: 5,
 			startingRunes: 3,
 			backgroundImage: 'dirtonlybackground'
 		},
-		[c,c,c,c,r,r,r,r,r,r,r,r,r,c,c,c,c,si,f,f,o,o,o,o,tr,sf,sf,ca,ca,ca,l,st,w,g,g,g,p,p,p,d],
+		[c,c,c,c,r,r,r,r,r,r,r,r,rb,r,r,r,r,r,c,c,c,c,c,c,si,f,f,o,o,o,o,tr,sf,ca,ca,ca,l,st,w,g,g,g,d],
 		[ca,ca,ca,ca,ca]
 	], [
 		{
 			levelNumber: 8,
 			isDaytime: true,
-			keysToWin: 0,
+			keysToWin: 2,
 			goalTiles: [d],
 			goalText: 'Find the traveler\'s portal',
 			pathsNeeded: 3,
@@ -155,13 +155,13 @@ exports["forest"] = [
 			startingRunes: 3,
 			backgroundImage: 'swampbackground'
 		},
-		[c,c,c,c,r,r,r,r,c,c,r,r,r,c,c,c,c,si,f,f,o,o,o,o,sf,ca,ca,ca,l,st,w,tr,tr,g,g,g,p,p,p,d],
+		[c,c,c,c,r,r,r,r,r,r,r,r,r,r,r,r,k,c,c,c,c,c,c,si,f,f,o,o,o,sf,ca,ca,l,st,w,tr,tr,g,g,g,s,k,k,m,d],
 		[ca,ca,ca,ca,ca]
 	], [
 		{
 			levelNumber: 9,
 			isDaytime: true,
-			keysToWin: 0,
+			keysToWin: 3,
 			goalTiles: [d],
 			goalText: 'Find the traveler\'s portal',
 			pathsNeeded: 3,
@@ -171,7 +171,7 @@ exports["forest"] = [
 			startingRunes: 3,
 			backgroundImage: 'swampbackground'
 		},
-		[c,c,c,c,r,r,r,r,c,c,r,r,r,c,c,c,c,c,si,f,f,o,o,o,o,ca,sf,ca,ca,l,st,w,tr,tr,g,g,g,p,p,p,d],
+		[c,c,c,c,r,r,r,r,r,r,r,r,c,c,r,r,r,c,c,c,c,c,si,f,f,o,o,o,o,ca,sf,ca,ca,l,st,w,tr,tr,g,g,g,k,k,k,d],
 		[ca,ca,ca,ca,ca]
 	], [
 		{

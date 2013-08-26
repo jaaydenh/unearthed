@@ -83,5 +83,14 @@ exports = Class(Emitter, function (supr) {
 		return success;
 	}
 
+	this.isItemInInventory = function(tileType) {
 
+		for (var i = 0;i < this._inventory.length;i++) {
+			if (this._inventory[i] == tileType) {
+				return true;
+			}
+		}
+		return false;
+	}
+ 
 });

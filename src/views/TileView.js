@@ -40,10 +40,9 @@ exports = Class(ui.View, function (supr) {
     };
 
     this.onRelease = function() {
-        console.log('view released!');
+        console.log(this._tileType + ' tile view released!');
     };
 	this.onRemoveView = function () {
-		//this.removeFromSuperview();
 		this._game.releaseView(this, 'tile');
 	};
 	this.onUpdate = function(tileNumber) {
@@ -82,7 +81,7 @@ exports = Class(ui.View, function (supr) {
 		this.wait += dt;
 		//if (this.pEngine) {
 			//this.pEngine.emitParticles(particleObjects);
-			if (this._tileModel._sleeping == true && this._tileModel._visible == true) {
+			if (this._tileModel.isSleeping() == true && this._tileModel._visible == true) {
 				
 				if (this.wait > 700) {
 					this.emitSleepingZParticles();
@@ -92,14 +91,38 @@ exports = Class(ui.View, function (supr) {
 			}
 		//}
 	}
+
+	this.onReveal = function() {
+		var shift = ((gameConstants.TILE_SIZE*1.4)-gameConstants.TILE_SIZE)/2;
+		
+		this._animator.now({ opacity:0,zIndex:20}, 300, animate.easeIn).then(bind(this, function() {
+			this._tileview.setImage(this.tile_img);	
+		}))
+		.then({opacity:1},50)
+		.then({scale:1.5,x: -shift, y: -shift},200, animate.easeOut)
+		.wait(30)
+		.then({scale:1, x: 0, y: 0},100, animate.easeIn)
+		.wait(50)
+		.then(
+			bind(this, function() {
+			this._tileModel.setVisible(true);
+		}));
+	}
+
 	this._showTile = function() {
+		
+		var peekActive = this._game.isPeekActive();
+
 		if (this._game.locked()) {
 			return false;
 		} else {
 			this._game.lock();
 		}
 
-		soundManager.play('step');
+		if (peekActive == false) {
+			soundManager.play('step');	
+		}
+		
 		var shift = ((gameConstants.TILE_SIZE*1.4)-gameConstants.TILE_SIZE)/2;
 		
 		this._animator.now({ opacity:0,zIndex:20}, 300, animate.easeIn).then(bind(this, function() {
@@ -113,8 +136,16 @@ exports = Class(ui.View, function (supr) {
 		.wait(50)
 		.then(
 			bind(this, function() {
-			this.activateTile();
-		}));
+
+				if (peekActive == false) {
+					this.activateTile();
+				} else {
+					this._tileview.setImage(default_img);
+					this._game.peekActive(false);
+					this._game.unlock();
+				}
+			}
+		));
 	
 	};
 	this.activateTile = function() {
@@ -182,8 +213,14 @@ exports = Class(ui.View, function (supr) {
 
 	this.setup = function() {
 		this._tileview.setImage(default_img);
+		this._glowview.style.visible = false;
 
-		this.tile_img = new Image({url: "resources/images/gametiles/" + this._tileType + ".png"});
+		var tileImage = this._tileType;
+		if (tileImage == 'door') {
+			tileImage = this._game.getDoorImage();
+		}
+
+		this.tile_img = new Image({url: "resources/images/gametiles/" + tileImage + ".png"});
 
 		this._tileInfoView = new MenuView({
 			superview: this._game,
@@ -204,6 +241,10 @@ exports = Class(ui.View, function (supr) {
 		});
 	}
 
+	this.onSetGlow = function(visible) {
+		this._glowview.style.visible = visible;
+	}
+
 	this.build = function () {
 
 		if (this._tileType == 'disabled') {
@@ -212,6 +253,7 @@ exports = Class(ui.View, function (supr) {
 			default_img = new Image({url: "resources/images/gametiles/" + this._defaultTileType + ".png"});
 			//this.background_img = new Image({url: "resources/images/" + this._background + ".png"});
 		}
+		this.glow_img = new Image({url: "resources/images/gametiles/glow.png"});
 
 		this._inputview = new ui.View({
 			superview: this,
@@ -220,7 +262,7 @@ exports = Class(ui.View, function (supr) {
 			y: 0,
 			width: gameConstants.TILE_SIZE,
 			height: gameConstants.TILE_SIZE,
-			zIndex: 5
+			zIndex: 50
 		});
 
 		this._tileview = new ui.ImageView({
@@ -229,7 +271,19 @@ exports = Class(ui.View, function (supr) {
 			x: 0,
 			y: 0,
 			width: gameConstants.TILE_SIZE,
-			height: gameConstants.TILE_SIZE
+			height: gameConstants.TILE_SIZE,
+			zIndex: 5
+		});
+
+		this._glowview = new ui.ImageView({
+			superview: this._inputview,
+			image: "resources/images/gametiles/glow.png",
+			x: 0,
+			y: 0,
+			width: gameConstants.TILE_SIZE,
+			height: gameConstants.TILE_SIZE,
+			visible: false,
+			zIndex: 0
 		});
 
 		/*this._tileBackground = new ui.ImageView({

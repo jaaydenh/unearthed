@@ -8,6 +8,8 @@ import src.constants.characterConstants as characterConstants;
 import src.constants.gameConstants as gameConstants;
 import ui.ImageView as ImageView;
 import src.views.InventoryItemView as InventoryItemView;
+import src.views.DogItemView as DogItemView;
+import src.views.RabbitItemView as RabbitItemView;
 
 exports = Class(ui.View, function (supr) {
 
@@ -33,15 +35,29 @@ exports = Class(ui.View, function (supr) {
 	};
 
 	this.onAddInventoryItem = function(item) {
+		var inventoryItem;
 
-		var inventoryItem = new InventoryItemView({
-			playerView: this,
-			invPosition: item.invPosition,
-			game: this.game,
-			playerModel: this._playerModel,
-			itemType: item.tile
-		});
-
+		if (item.tile == 'life_potion') {
+			inventoryItem = new InventoryItemView({
+				playerView: this,
+				invPosition: item.invPosition,
+				game: this.game,
+				playerModel: this._playerModel,
+				itemType: item.tile
+			});
+		} else if (item.tile == 'dog') {
+			inventoryItem = new DogItemView({
+				tileType: 'dog',
+				levelStart: false,
+				game: this.game
+			});
+		} else if (item.tile == 'rabbit') {
+			inventoryItem = new RabbitItemView({
+				tileType: 'rabbit',
+				levelStart: false,
+				game: this.game
+			});
+		}
 		this.setInventoryItemPos(inventoryItem, item.invPosition);
 		this.game.addSubview(inventoryItem);
 	}

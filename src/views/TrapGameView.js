@@ -239,7 +239,7 @@ exports = Class(DialogBackgroundView, function (supr) {
 				this.hide();
 				this.game.removeSubview(this);
 				var loseMessage = "Captured in a trap!";
-				this.game.parent.end("loss", 0, loseMessage);
+				this.game.parent.end("loss", {goldFound: 0, message: loseMessage, specialsFound: []});
 			}))			
 		} else {
 			this.processing = false;

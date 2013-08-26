@@ -29,8 +29,9 @@ exports = Class(ui.View, function (supr) {
 		this._id = opts.id;
 		this._description = opts.description;
 		this._tileType = opts.tileType;
-		this._game = opts.game;
-		
+		this._gameView = opts.gameView;		
+		this._gameModel = opts.gameModel;
+
 		this._tileNumber = -1;
 		this._defaultTileType = 'tree';
 		this._bones = 0;
@@ -48,9 +49,8 @@ exports = Class(ui.View, function (supr) {
 
 	this._setDefaults = function() {
 		this._visible = false;
-		this._isDaytime = false;
 		this._causeDamage = false;
-		this._stayVisible = true;
+		this._stayVisible = false;
 		this._positionRule = '';
 		this._id = 0;
 		this._adjacentTile = false;
@@ -60,7 +60,6 @@ exports = Class(ui.View, function (supr) {
 		this._diagonal = false;
 		this._adjacent = false;
 		this._description = 'default description';
-		this._isCompanion = false;
 		this._scrambleAdjacent = false;
 		this._removeGoblin = false;
 		this._addHeart = false;
@@ -100,7 +99,6 @@ exports = Class(ui.View, function (supr) {
 		{
 		case "lost":
 		  this._id = 101;
-		  this._stayVisible = false;
 		  this._hideAll = true;
 		  this._notAdjacent = true;
 		  this._notAdjacentTile = 'path';
@@ -108,17 +106,10 @@ exports = Class(ui.View, function (supr) {
 		  break;
 		case "path":
 		  this._id = 102;
-		  this._stayVisible = true;
 		  this._adjacent = true;
 		  this._diagonal = true;
 		  this._adjacentTile = 'path';
 		  this._description = 'Find the all the paths along with the travellers portal to exit this area.';
-		  break;
-		case "dog":
-		  this._id = 103;
-		  this._isCompanion = true;	
-		  this._isSpecial = true;
-		  this._description = 'A loyal companion that loves finding bones. Rescue this creature to bring this companion along on future levels';
 		  break;
 		case "witch":
 		  this._id = 104;
@@ -127,14 +118,8 @@ exports = Class(ui.View, function (supr) {
 		  this._creature = true;
 		  this._description = 'Witches love to confuse travellers with their magic but have a love for black cats';
 		  break;
-		case "rabbit":
-		  this._id = 105;
-		  this._stayVisible = false;
-		  this._description = 'test description';
-		  break;
 		case "goblinberries":
 		  this._id = 106;	
-		  this._stayVisible = false;
 		  this._removeGoblin = true;
 		  this._description = 'test description';
 		  break;
@@ -145,20 +130,20 @@ exports = Class(ui.View, function (supr) {
 		  this._description = 'test description';
 		  break;
 		case "moon":
-		  this._id = 108;
+		  /*this._id = 108;
 		  this._stayVisible = true;
 		  this._changeToNight = true;
-		  this._description = 'test description';
+		  this._description = 'test description';*/
 		  break;
 		case "sun":
-		  this._id = 109;
+		  /*this._id = 109;
 		  this._stayVisible = true;
 		  this._changeToDay = true;
-		  this._description = 'test description';
+		  this._description = 'test description';*/
 		  break;
 		case "door":
 		  this._id = 110;
-		  this._stayVisible = false;
+		  this._stayVisible = true;
 		  this._description = 'This is one of the lost travelers portals. Use these to exit this area';
 		  break;
 		case "goblin":
@@ -197,20 +182,8 @@ exports = Class(ui.View, function (supr) {
 		  this._shuffleTrigger = "goblin";
 		  this._description = 'Needed to unlock the travelers portals';
 		  break;
-		case "ogre":
-		  /*this._id = 114;
-		  this._dangerous = true;
-		  this._stayVisible = false;
-		  this._causeDamage = true;
-		  this._sleepInDay = true;
-		  this._sleepingtile = 'ogre_sleeping';
-		  this._damage = 1;
-		  this._creature = true;
-		  this._description = 'Big, ugly and they hurt';*/
-		break;
 		case "rock":
 		  this._id = 115;	
-		  this._stayVisible = false;
 		  this._description = 'Mostly uninteresting but the number of bones can tell how many dangerous creatures are nearby';
 		break;
 		case "trap":
@@ -218,7 +191,6 @@ exports = Class(ui.View, function (supr) {
 		  this._adjacent = true;
 		  this._adjacentTile = "goldcoin"
 		  this._dangerous = true;
-		  this._stayVisible = false;
 		  this._trap = true;
 		  this._description = 'Avoid traps at all cost. There is the risk of getting captured by goblins';
 		break;
@@ -238,20 +210,10 @@ exports = Class(ui.View, function (supr) {
 		  this._notAdjacentTile = 'goblin';
 		  this._description = 'An almost entirely uninteresting patch of flowers. However, flowers never grow near goblins';
 		break;
-		case "store":
-		  this._id = 120;	
-		  this._store = true;
-		  this._description = 'Stores randomly appear and are a great place to use all that hard earned gold';
-		break;
 		case "goldbag":
 		  this._id = 121;
 		  this._description = 'Worth 10 gold coins';
 		break;
-		case "singingflower":
-		  this._id = 123;
-		  this._description = 'A very noisy flower which has been known to wakeup nearby sleeping monsters';
-		  this._isLoud = true;
-		break;  
 		}
 	}
 
@@ -289,22 +251,47 @@ exports = Class(ui.View, function (supr) {
 		this._visible = visible;
 	}
 
+	this.getStayVisible = function() {
+		return this._stayVisible;
+	}
+
 	this.getDescription = function() {
 		return this._description;
 	}
 
 	this.activateTile = function () {
 		//this._visible = true;
+
 		this.processTileRules();
-		//this._game.unlock();
 	};
 	
 	this.updateGame = function() {
-		this._game.checkGoblinsVisible();
-		this._game.checkHintTileStates();
-		this._game.checkStatus();
+		this._gameView.checkGoblinsVisible();
+		this._gameView.checkHintTileStates();
+		var isGoalTile = false;
 
-		if (this._stayVisible === false && this._game.isDaytime() == false) {
+		for (var i =0 ;i<this._gameView.goalTiles.length;i++) {
+			if (this._tileType == this._gameView.goalTiles[i]) {
+				isGoalTile = true;
+			}
+		}
+
+		if (isGoalTile == true) {
+			if (this._gameView.isGoalActive() == true) {
+				if (this._tileType == 'door') {
+					this._gameView.checkForGoal(this);	
+				}				
+			} else {
+				this._gameView.checkToActivateGoal();
+				//if (activateGoal == true) {
+				//	this._game.setGoalActive(_goalActive = true;
+				//}
+			}
+		}
+
+		this._gameView.checkGameStatus();
+
+		if (this._stayVisible === false && this._gameModel.isDaytime() == false) {
 			this.resetTile();
 		}	
 	}
@@ -314,14 +301,14 @@ exports = Class(ui.View, function (supr) {
 	}
 	
 	this.replaceTile = function() {
-		this._game.replaceTile(this);
+		this._gameView.replaceTile(this);
 	}
 	
 	this.processTileRules = function() {
 		var didStealOrShuffle = false;
 
 		if (this._tileType == 'goblin') {
-			this._game.getGameModel().updateVisibleGoblins(1);
+			this._gameModel.updateVisibleGoblins(1);
 		}
 
 		// replace this tile with a new tile hide this tile after 1 second, replace with a new tile then hide all tiles
@@ -329,28 +316,20 @@ exports = Class(ui.View, function (supr) {
 			
 			animate(this).wait(1000)
 			.then(bind(this, function () {
-				this._game.replaceTile(this);
-				this._game.resetAllTiles();	
+				this._gameView.replaceTile(this);
+				this._gameView.resetAllTiles();	
 			}))
 		}
-		
-		/*if (this._store == true) {
-			this._game.storeView = new StoreView({
-				game: this._game
-			})
-			this._game.addSubview(this._game.storeView);
-			this._game.storeView.show();
-		}*/
 
 		if (this._campfire == true) {
 
 			var runeModel = new RuneModel( 
 			{
-				game: this._game,
+				game: this._gameView,
 				runeType: 'campfire'
 			});
 
-			var runeView = this._game.runeViewPool.obtainView();
+			var runeView = this._gameView.runeViewPool.obtainView();
 
 			runeView._runeType = 'campfire';
 			runeView.setRuneImage('campfire');
@@ -362,23 +341,15 @@ exports = Class(ui.View, function (supr) {
 
 			animate(this).wait(400)
 			.then(bind(this, function() {
-				this._game.replaceTile(this);
+				this._gameView.replaceTile(this);
 
 				runeModel.placeRune();
 			}))
 		}
 
-		if (this._isLoud == true) {
-			var sleepingTiles = this._game.getAllTileWithRule("_sleeping");
-
-			sleepingTiles.forEach(function(tile) {
-				tile.wake();
-			})
-		} 
-
 		if (this._threeInaRow == true) {
 			//Check row for 3 in a row
-			var tileRow = this._game.getTileRow(this._tileNumber);
+			var tileRow = this._gameView.getTileRow(this._tileNumber);
 			var sequentialTiles = [];
 
 			for (var i = 0; i < tileRow.length; i++) {
@@ -396,7 +367,7 @@ exports = Class(ui.View, function (supr) {
 			//Check col for 3 in a row
 			if (sequentialTiles.length < 3) {
 				sequentialTiles.length = 0;
-				var tileCol = this._game.getTileCol(this._tileNumber);
+				var tileCol = this._gameView.getTileCol(this._tileNumber);
 				for (var i = 0; i < tileCol.length; i++) {
 					var tile = tileCol[i];
 					if (tile.getTileType() == this._tileType && tile.isVisible() == true) {
@@ -416,24 +387,20 @@ exports = Class(ui.View, function (supr) {
 				sequentialTiles.forEach(bind(this,function(tileNum) {
 					if (tileNum != this._tileNumber) {
 						// move adjacent tiles to current tile and replace adjacent tiles with tile from deck
-						this._game.getTileInLayout(tileNum).moveToTile(this._tileNumber, replaceTile);		
+						this._gameView.getTileInLayout(tileNum).moveToTile(this._tileNumber, replaceTile);		
 					}
 				}))
 				// replace current tile with upgraded tile 
 				this.setTileType(this._upgradeTile);
 			}
 		}
-	
-		//if (tile.isCompanion == true) {
-		//	this._game.processCompanionTile(this);
-		//}
 
 		//if (tile.removeGoblin == true) {
 		//	didStealOrShuffle = goblinEatsBerries(tile, gameScreen);
 		//}	
 
 		if (this._scrambleAdjacent == true) {
-			this._game.scrambleAdjacentTiles(this);
+			this._gameView.scrambleAdjacentTiles(this);
 		}
 
 		//if (tile.moveToInventory == true) {
@@ -441,68 +408,12 @@ exports = Class(ui.View, function (supr) {
 		//}
 
 		if (this._trap == true) {
-			this._game.trapGameView = new TrapGameView({
-				game: this._game
+			this._gameView.trapGameView = new TrapGameView({
+				game: this._gameView
 			})
-			this._game.addSubview(this._game.trapGameView);
-			this._game.trapGameView.show();
+			this._gameView.addSubview(this._gameView.trapGameView);
+			this._gameView.trapGameView.show();
 		}	
-
-		/*if (this._causeDamage == true) {
-
-			//this.sound.play('orchit');
-			soundManager.play('orc_hit');
-			this._game.getPlayerModel().removeHeart();
-
-			animate(this._game).now({x:50,y:-15},70)
-			.then({x:-50,y:20},70)
-			.then({x:50,y:30},70)
-			.then({x:-50,y:30},70)
-			.then({x:50,y:20},70)
-			.then({x:0, y:0},70);
-
-			if (this._game.getPlayerModel().getHearts() == 0) {
-				this._game.lose = true;
-				this._game.loseMessage = "You have lost all your hearts!";
-			}
-
-		}*/
-		
-		/*if (this._changeToNight == true) {
-			gameScreen._gui_frame.setImage(gameScreen.gui_night_img);
-
-			var dayTile = new Tile('sun');
-			bindExploreToTile(dayTile, gameScreen);
-			sendTileToDrawPile(dayTile, gameScreen);
-
-			var newTile = replaceTile(tile, gameScreen);
-			animate(tile).wait(1000).then({opacity:0},500)
-			.then(bind(gameScreen, function () {
-				gameScreen.removeSubview(tile);
-				gameScreen.addSubview(newTile);
-			}))
-
-			this._playerModel.setGameTime('night');
-			gameScreen.isDaytime = false;
-		}
-
-		if (this._changeToDay == true) {
-			gameScreen._gui_frame.setImage(gameScreen.gui_day_img);
-
-			var nightTile = new Tile('moon');
-			bindExploreToTile(nightTile, gameScreen);
-			sendTileToDrawPile(nightTile, gameScreen);
-			
-			var newTile = replaceTile(tile, gameScreen);
-			animate(tile).wait(1000).then({opacity:0},500)
-			.then(bind(gameScreen, function () {
-				gameScreen.removeSubview(tile);
-				gameScreen.addSubview(newTile);
-			}))
-
-			this._playerModel.setGameTime('day');
-			gameScreen.isDaytime = true;
-		}*/
 		
 		/*if (tile.stealInRow != null && didStealOrShuffle == false) {
 		  	if (tile.stealInRow == true) {
@@ -516,38 +427,27 @@ exports = Class(ui.View, function (supr) {
 		}*/
 		if (didStealOrShuffle == false) {
 		  	if (this._shuffleRow == true) {
-				didStealOrShuffle = this._game.shuffleRow(this);
+				didStealOrShuffle = this._gameView.shuffleRow(this);
 			}
 		} 
 		if (didStealOrShuffle == false) {
 		  	if (this._shuffleColumn == true) {
-				didStealOrShuffle = this._game.shuffleColumn(this);
+				didStealOrShuffle = this._gameView.shuffleColumn(this);
 			}
 		} 
-
-		if (this._tileType == this._game.goalTiles[0]) {
-			//if (this._goalActive == true) {
-				this._game.checkForGoal();
-			//} else {
-			//	var activateGoal = this._game.checkToActivateGoal();
-			//	if (activateGoal == true) {
-			//		this._goalActive = true;
-			//	}
-			//}
-		}
-
-
 	};
 
+	this.isSleeping = function() {
+		return this._sleeping;
+	}
+
+	this.setGlow = function(visible) {
+		this.emit('SetGlow', visible);
+	}
+
 	this.wake = function() {
-		if (this._wakingtile != '') {
-			this._tileType = this._wakingtile;
-			this._setDefaults();
-			this.setTileRules();
-			this._visible = true;
-			this.updateImage(this._tileType);
-			this.emit('Wake');	
-		}
+		this._sleeping = false;
+		this.emit('Wake');	
 	}
 
 	this.resetTile = function() {
@@ -555,7 +455,7 @@ exports = Class(ui.View, function (supr) {
 		this.emit('Reset');
 		
 		if (this._tileType == 'goblin' && this._visible == true) {
-			this._game.getGameModel().updateVisibleGoblins(-1);
+			this._gameModel.updateVisibleGoblins(-1);
 		}
 		this._visible = false;
 	};

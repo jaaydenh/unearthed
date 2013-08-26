@@ -134,7 +134,7 @@ exports = Class(View, function (supr) {
 		this.startTime = (new Date()).getTime();
 	};
 
-	this.end = function(status, goldFound, message) {
+	this.end = function(status, opts) {
 		var worlds = Data.getItem("worlds"),
 			lvls = worlds[this.world],
 			lives;
@@ -155,7 +155,6 @@ exports = Class(View, function (supr) {
 				}
 
 				//this.flow.setLevelPosition(lvls.unlocked, lvls.currentLevel);
-
 
 				Data.setItem("worlds", worlds);
 
@@ -179,7 +178,7 @@ exports = Class(View, function (supr) {
 				Data.setItem('lives', lives > 0 ? lives-- : 5);
 			}
 
-			this.flow.change("game", status === "win" ? "win" : "lose", { worldwin: beat, goldFound: goldFound, message: message });
+			this.flow.change("game", status === "win" ? "win" : "lose", { worldwin: beat, goldFound: opts.goldFound, message: opts.message, specialsFound: opts.specialsFound });
 		}
 	};
 

@@ -164,7 +164,7 @@ exports = Class(View, function(supr) {
 	};
 
 	this.startLevel = function(tile) {
-		if (tile.node != 1) {
+		//if (tile.node != 1) {
 			var worlds = this.worlds, game = this.game;
 			
 			game.style.opacity = 1;
@@ -177,7 +177,7 @@ exports = Class(View, function(supr) {
 				//this.background.style.visible = false;
 				this.unlock();
 			}));
-		}
+		//}
 	}
 
 	/*this.showText = function (text) {
@@ -290,14 +290,15 @@ exports = Class(View, function(supr) {
 					end.worldwin = opts.worldwin;
 					end.goldFound = opts.goldFound;
 					end.goldFoundText.setText("+ " + opts.goldFound);
-					//GC.app.audioManager.play("win", 1);
-					//this.sound.play('win');
+					end.specialsFound = opts.specialsFound;
+					if (opts.specialsFound.length > 0) {
+						end.showDiscoveryView();	
+					}
+					
 					soundManager.play('win');
 				} else {
 					end.loseText.setText(opts.message);
 					end.update();
-					//GC.app.audioManager.play("lose", 1);
-					//this.sound.play('lose');
 					soundManager.play('lose');
 				}
 

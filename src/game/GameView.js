@@ -12,10 +12,9 @@ import menus.views.DocumentView as DocumentView;
 import menus.views.MenuView as MenuView;
 import menus.constants.menuConstants as menuConstants;
 import src.constants.gameConstants as gameConstants;
-import src.game.Companion as Companion;
 import src.util.Data as Data;
 import src.models.GameModel as GameModel;
-import src.models.TileModel as TileModel;
+
 import src.views.TileView as TileView;
 import src.util.Utility as Utility;
 import ui.ViewPool as ViewPool;
@@ -24,8 +23,8 @@ import src.models.RuneModel as RuneModel;
 import src.views.RuneView as RuneView;
 import ui.ParticleEngine as ParticleEngine;
 import src.views.LevelStartView as LevelStartView;
-import src.models.OgreModel as OgreModel;
-import src.models.StoreModel as StoreModel;
+import src.views.InfoView as InfoView;
+
 
 var game_on = false,
 	lang = 'en',
@@ -47,6 +46,7 @@ exports = Class(ui.View, function (supr) {
 
 		this.parent = opts.parent;
 		this._locked = false;
+		this._peekActive = false;
 		supr(this, 'init', [opts]);
 		this.style.width = gameConstants.GAME_WIDTH;
 		this.style.height = gameConstants.GAME_HEIGHT;
@@ -243,6 +243,10 @@ exports = Class(ui.View, function (supr) {
 		this.levelStartView = new LevelStartView({
 			game: this
 		});
+
+		this.infoView = new InfoView({
+
+		});
 	};
 
 
@@ -286,6 +290,7 @@ exports = Class(ui.View, function (supr) {
 
 	this.resetView = function(opts) {
 
+		this.specialsFound = [];
 		this.tileViewPool.releaseAllViews();	
 		this.backgroundImageViewPool.releaseAllViews();
 		this.runeViewPool.releaseAllViews();
@@ -296,43 +301,30 @@ exports = Class(ui.View, function (supr) {
 
 		var data = opts.level.shift();
 		this._gameModel = new GameModel({
-			game: this,
+			gameView: this,
 			gridWidth: data.gridWidth,
-			gridHeight: data.gridHeight
+			gridHeight: data.gridHeight,
+			isDaytime: data.isDaytime
 			//data: opts.level.shift()
 		});
-
-		/*this._levelGoalView = new MenuView({
-			superview: this,
-			x: 20,
-			y: 20,
-			width: gameConstants.GAME_WIDTH - 40,
-			height: gameConstants.GAME_HEIGHT - 40,
-			title: 'Find '+ data.goal.length + ' ' + data.goal[0] + ' + ' + data.pathsNeeded + ' paths',
-			items: [
-				{image: 'resources/images/gametiles/' + data.goal[0] + '.png', height: gameConstants.TILE_SIZE, width: gameConstants.TILE_SIZE, align: 'center'},
-				{image: 'resources/images/gametiles/path.png', height: gameConstants.TILE_SIZE, width: gameConstants.TILE_SIZE, align: 'center'},
-				{item: 'Ok', action: 'Back'}
-			],
-			showTransitionMethod: menuConstants.transitionMethod.FADE,
-			showTransitionTime: 1500,
-			hideTransitionMethod: menuConstants.transitionMethod.FADE
-		});*/
 		
+		this._multiSelectActive = false;
+		this._goalActive = false;
 		this._specials = Data.getItem("specials");
-
 		this.tilesSeen = Data.get("tilesSeen");
 		this.goalTiles = data.goalTiles;
 		this.goalText = data.goalText;
 		this.pathsNeeded = data.pathsNeeded;
 		this.goblinsVisible = 0;
 		this.keysToWin = data.keysToWin;
+		this._doorLocked = false;
+		if (this.keysToWin > 0) {
+			this._doorLocked = true;
+		} 
 		this.hearts = data.hearts;
-		//this.doorsToWin = data.doorsToWin;
 		//this.gameID = ++gameID;
 		this.won = false;
 		this.lose = false;
-		this._isDaytime = data.isDaytime;
 		this.level = opts.level;
 		this.levelNum = data.levelNumber;
 		this.levelTotal = opts.levelTotal;
@@ -344,7 +336,7 @@ exports = Class(ui.View, function (supr) {
 		this._playerModel.updateGold();
 
 
-		if (this._isDaytime === true) {
+		if (this._gameModel.isDaytime() === true) {
 			//this._gui_frame.setImage(this.gui_day_img);
 			this._gameStatusModel.setGameTime('day');
 		} else {
@@ -353,14 +345,10 @@ exports = Class(ui.View, function (supr) {
 		}
 
 		// Display level introduction screen
-		this.levelStartView.setup({levelNum: this.levelNum, goalText: this.goalText, goalTiles: this.goalTiles});
+		this.levelStartView.setup({levelNum: this.levelNum, goalText: this.goalText, goalTiles: this.goalTiles, specials: this._specials});
 		this.addSubview(this.levelStartView);
 		this.levelStartView.show();
 
-		// remove existing tiles from GameView
-		//currentLayout.forEach(bind(this, function(tile) {
-		//	this.removeSubview(tile);
-		//}))
 		currentLayout = [];
 
 		this._gameModel._runeGrid = [];
@@ -379,32 +367,8 @@ exports = Class(ui.View, function (supr) {
 
 		// Loads the Tile Deck in the game model with the tiles for the level
 		this.tileDeck.forEach(bind(this,function(tileType) {
-			//var tile = new Tile(tileType, {
-		//		game: this
-		//	});
-		var tileModel;
-			if (tileType == 'ogre') {
-	 			tileModel = new OgreModel( 
-				{
-					game: this,
-					tileType: tileType
-				});
-			} else if (tileType == 'store') {
-				tileModel = new StoreModel( 
-				{
-					game: this,
-					tileType: tileType
-				});
-			} else {
-				tileModel = new TileModel( 
-				{
-					game: this,
-					tileType: tileType
-				});
-			}
 
-
-			this._gameModel.addTileToDeck(tileModel);
+			this._gameModel.addTileToDeck(tileType);
 		}))
 
 		// iterates through the tile deck for the level and attaches a tileview to each tilemodel and places the tilemodel
@@ -454,13 +418,7 @@ exports = Class(ui.View, function (supr) {
 		}
 
 		this.checkHintTileStates();
-
-		//this._levelGoalView.show();
 	};
-
-	this.isDaytime = function() {
-		return this._isDaytime;
-	}
 
 	this.addRune = function(runeType) {
 
@@ -499,7 +457,9 @@ exports = Class(ui.View, function (supr) {
 			on('RemoveView', bind(tileView, 'onRemoveView')).
 			on('UpdateTileType', bind(tileView, 'onUpdateTileType')).
 			on('MoveToTile', bind(tileView, 'onMoveToTile')).
-			on('Wake', bind(tileView, 'onWake'));
+			on('Wake', bind(tileView, 'onWake')).
+			on('Reveal', bind(tileView, 'onReveal')).
+			on('SetGlow', bind(tileView, 'onSetGlow'));
 
 		this.addSubview(tileView);
 	}
@@ -521,22 +481,43 @@ exports = Class(ui.View, function (supr) {
 		return creatures;
 	}
 
-	this.checkStatus = function() {
+	this.checkGameStatus = function() {
 		if (this.won || this.lose) {
 			this.publish('end');
 			if (this.won) {
 				animate(this).wait(1000)
 				.then(bind(this, function() {
-					this.parent.end("win", this.goldFound);
+					this.parent.end("win", {goldFound: this.goldFound, message: "", specialsFound: this.specialsFound});
 				}));
 				
 			} else if (this.lose) {
-				this.parent.end("loss", 0, this.loseMessage);
+				this.parent.end("loss", {goldFound: 0, message: this.loseMessage, specialsFound: this.specialsFound});
 			}
 		}
 	};
 
+	this.peekActive = function(active) {
+		this._peekActive = active;
+	}
+
+	this.isPeekActive = function() {
+		return this._peekActive;
+	}
+
+	// enter multiselect mode
+	// create and display a new view overlaying the tile grid
+	// display confirm and cancel buttons
+	// on inputselect, determine the row, and display selection graphic on the row
+	// cancel button - remove the overlay view, cancel and confirm buttons
+	// confirm button - remove the overlay view, cancel and confirm buttons and process
+	// the tile grid with the ability of the companion
 	this.multiSelectMode = function(tile) {
+
+		if (this._multiSelectActive == true) {
+			return;
+		} else {
+			this._multiSelectActive = true;
+		}
 
 		this.multiSelectView = new ui.View({
 			superview: this,
@@ -608,6 +589,7 @@ exports = Class(ui.View, function (supr) {
 		if (this.selectionBorder) {
 			this.removeSubview(this.selectionBorder);
 		}
+		this._multiSelectActive = false;
 	}
 
 	this.multiSelectConfirm = function() {
@@ -619,8 +601,9 @@ exports = Class(ui.View, function (supr) {
 		}
 
 		if (this.activeCompanionTile.getTileType() == 'dog') {
-			findBones(this.activeRow);
+			this.findBones(this.activeRow);
 		}
+		this._multiSelectActive = false;
 	}
 
 	this.multiSelect = function(event,point) {
@@ -633,7 +616,7 @@ exports = Class(ui.View, function (supr) {
 
 		this.selectionBorder = new ui.ImageView({
 			parent: this,
-			x: 0,
+			x: 0 + gameConstants.TILE_X_OFFSET,
 			y: tilesize * this.activeRow + tilegrid_y_offset,
 			width: gameConstants.TILE_SIZE * gridWidth + tilegrid_x_offset + 20,
 			height: gameConstants.TILE_SIZE,
@@ -646,9 +629,29 @@ exports = Class(ui.View, function (supr) {
 		//alert('multiselect x: ' + point.x + ', y: ' + point.y + ', row: ' + row + ', col: ' + col);
 	}
 
+	this.findBones = function(row) {
+
+		for(var i = row * this.gridWidth; i < row * this.gridWidth + this.gridWidth;i++) {
+			if (currentLayout[i].bones > 0) {
+				if(currentLayout[i].isVisible() == false) {
+					currentLayout[i].emit('Reveal');
+				}
+			}
+		}
+		//alert('findbones: ' + row);
+	}
+
 	this.resetAllTiles = function() {
 		for (var i = 0;i < currentLayout.length;i++) {
 			if (currentLayout[i].isVisible() == true) {
+				currentLayout[i].resetTile();
+			}
+		}
+	}
+
+	this.resetNonStayVisibleTiles = function() {
+		for (var i = 0;i < currentLayout.length;i++) {
+			if (currentLayout[i].isVisible() == true && currentLayout[i].getStayVisible() == false) {
 				currentLayout[i].resetTile();
 			}
 		}
@@ -684,58 +687,93 @@ exports = Class(ui.View, function (supr) {
 		}
 	}
 
+	this.setGoalActive = function(tiles) {
+		this._goalActive = true;
+
+		tiles.forEach(bind(this, function(tile) {
+			tile.setGlow(true);
+			if (tile.getTileType() == 'door' && this.keysToWin == 0) {
+				tile.updateImage('door_open');
+			}
+		}))
+	}
+
+	this.unlockDoor = function(doorTile) {
+		//animate(this).now(bind(this, function() {
+			this._doorLocked = false;
+			doorTile.updateImage('door_open');
+		//}))
+		//.wait(600);
+	}
+
+	this.isGoalActive = function() {
+		return this._goalActive;
+	}
+	
 	this.checkToActivateGoal = function() {
-		var goals = this.goalTiles;
-		var activate = false;
-		var goalCount = 0;
-		var pathCount = 0;
+		var goals = this.goalTiles.slice(0);
+		var tiles = [];
+
 		for (var i = 0;i < currentLayout.length;i++) {
 			if (currentLayout[i].isVisible() == true) {
 				for (var j = 0; j < goals.length;j++) {
 					if (currentLayout[i].getTileType() === goals[j]) {
 						goals.splice(j, 1);
+						tiles.push(currentLayout[i]);
 						break;
 					}
 				}
 			}
 		}
 		if (goals.length == 0) {
-			return true;
-		} else {
-			return false;
+			this.setGoalActive(tiles);
+			//return true;
 		}
+		// else {
+			//this.goalTiles = goals;
+			//return false;
+		//}
 	}
 
-	this.checkForGoal = function() {
-			var goals = this.goalTiles;
-			var keyCount = 0;
-			var goalCount = 0;
-			var pathCount = 0;
-			for (var i = 0;i < currentLayout.length;i++) {
-				if (currentLayout[i].isVisible() == true) {
-					if (currentLayout[i].getTileType() == goals[0]) {
-						goalCount++;
-					}
-					if (currentLayout[i].getTileType() == 'key') {
-						keyCount++;
-					}
-					if (currentLayout[i].getTileType() == 'path') {
-						pathCount++;
-					}
+	this.checkForGoal = function(doorTile) {
+		//var goals = this.goalTiles;
+		var keyCount = 0;
+		//var goalCount = 0;
+		//var pathCount = 0;
+
+		for (var i = 0;i < currentLayout.length;i++) {
+			if (currentLayout[i].isVisible() == true) {
+				//if (currentLayout[i].getTileType() == goals[0]) {
+				//	goalCount++;
+				//}
+				if (currentLayout[i].getTileType() == 'key') {
+					keyCount++;
 				}
-			} 
-			if (keyCount >= this.keysToWin && goalCount >= goals.length && pathCount >= this.pathsNeeded) {
-				var specialTiles = this.getTilesWithProperty('_isSpecial');
+				//if (currentLayout[i].getTileType() == 'path') {
+				//	pathCount++;
+				//}
+			}
+		} 
+		if (keyCount >= this.keysToWin) {
+		// && pathCount >= this.pathsNeeded) {
+			if (this._doorLocked == true) {
+				this.unlockDoor(doorTile);
+			} else {
+
+				var specialTiles = this.getTilesWithProperty('_isSpecial', true);
 				if (specialTiles.length > 0) {
 					specialTiles.forEach(bind(this, function(tile) {
-						this._specials.push(tile);
+						var newSpecial = true;
 
-						this.discoveryView = new DiscoveryView({
-							game: this._game,
-							special: tile
-						})
-						this.addSubview(this.discoveryView);
-						this.discoveryView.show();
+						this._specials.forEach(bind(this, function(special) {
+							if (special == tile.getTileType()) {
+								newSpecial = false;
+							}
+						}))
+						if (newSpecial == true) {
+							this._specials.push(tile.getTileType());
+							this.specialsFound.push(tile.getTileType());	
+						}
 					}))
 					Data.set("specials", this._specials);
 				}
@@ -743,6 +781,37 @@ exports = Class(ui.View, function (supr) {
 				this.won = true;
 				this.goldFound = this.tallyGold();
 			}
+		} else {
+			this.infoView.setDialog("You require " + this.keysToWin + " key(s) to unlock the traveler's portal");
+			//this.infoView.style.visible = true;
+			this.addSubview(this.infoView);
+			this.infoView.show();
+		}
+	}
+
+	this.getDoorImage = function() {
+		var keys = this.keysToWin;
+
+		switch (keys)
+		{
+			case 0:
+				return 'door_nokey';
+			break;
+			case 1:
+				return 'door_1key';
+			break;
+			case 2:
+				return 'door_2key';
+			break;
+			case 3:
+				return 'door_3key';
+			break;
+		}
+		return 'door_nokey';
+	}
+
+	this.addNewSpecial = function() {
+
 	}
 
 	this.tallyGold = function() {
@@ -1260,79 +1329,6 @@ exports = Class(ui.View, function (supr) {
 		this.particleEngine.runTick(dt);
 	}
 });
-
-function findBones(row) {
-
-	for(var i = row * this.gridWidth; i < row * this.gridWidth + this.gridWidth;i++) {
-		if (currentLayout[i].bones > 0) {
-			if(currentLayout[i].isVisible() == false) {
-				currentLayout[i].explore();
-			}
-		}
-	}
-	//alert('findbones: ' + row);
-}
-
-/*function processCompanionTile(tile, gameScreen) {
-	var newTile = replaceTile(tile, gameScreen);
-	var x,y;
-	var player = gameScreen._playerModel;
-	var alreadyHasCompanion = false;
-
-	player.companions.forEach(function(companionTile) {
-		if (tile.getTileType() == companionTile.getTileType()) {
-			alreadyHasCompanion = true;
-		}
-	})
-	if (alreadyHasCompanion == false) {
-
-		switch (player.companions.length)
-		{
-			case 0:
-		      x = 742;
-			  y = 339;
-		 	break;
-			case 1:
-		  	  x = 798;
-		  	  y = 339;
-			break;
-			case 2:
-		  	  x = 742;
-		  	  y = 393;
-			break;
-			case 3:
-		  	  x = 798;
-		  	  y = 395;
-			break;
-		}
-
-	  var scale = 80 / tile.style.width;
-	  animate(tile).wait(500).then({opacity: 0}, 500, animate.eastOut)
-	  	.then(bind(this, function () {
-	  		player.companions.push(tile);
-			gameScreen.addSubview(newTile);
-			gameScreen.removeSubview(tile);
-			var companion = new Companion(tile.getTileType());
-			companion.style.x = x;
-			companion.style.y = y;
-			gameScreen.addSubview(companion);
-			//tile.removeAllListeners();
-
-			//tile._inputview.on('InputSelect', bind(tile, function () {
-				// enter multiselect mode
-				// create and display a new view overlaying the tile grid
-				// display confirm and cancel buttons
-				// on inputselect, determine the row, and display selection graphic on the row
-				// cancel button - remove the overlay view, cancel and confirm buttons
-				// confirm button - remove the overlay view, cancel and confirm buttons and process
-				// the tile grid with the ability of the companion
-				//gameScreen.multiSelectMode(tile);
-				
-								
-			//}));
-	  	}))
-	}
-}*/
 
 function sendTileToDrawPile(tile, gameScreen) {
 	gameScreen._gameModel.addTileToDeck(tile);

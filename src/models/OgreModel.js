@@ -11,15 +11,9 @@ exports = Class(TileModel, function (supr) {
 
 	this.init = function (opts) {
 
-		this._dangerous = true;
-		this._stayVisible = false;
-		this._causeDamage = true;
-		this._sleepInDay = true;
-		this._damage = 1;
-		this._creature = true;
-
 		opts = merge(opts, {
-			game: opts.game,
+			gameModel: opts.gameModel,
+			gameView: opts.gameView,
 			id: 114,
 			description: 'Big, ugly and they hurt',
 
@@ -27,7 +21,14 @@ exports = Class(TileModel, function (supr) {
 
 		supr(this, 'init', [opts]);
 
-		if (this._game.isDaytime() == true) {
+		this._dangerous = true;
+		this._stayVisible = false;
+		this._causeDamage = true;
+		this._sleepInDay = true;
+		this._damage = 1;
+		this._creature = true;
+
+		if (this._gameModel.isDaytime() == true) {
 			this._sleeping = true;
 		}
 	};
@@ -38,19 +39,19 @@ exports = Class(TileModel, function (supr) {
 
 			soundManager.play('orc_hit');
 			for (var i = 0;i<this._damage;i++) {
-				this._game.getPlayerModel().removeHeart();	
+				this._gameView.getPlayerModel().removeHeart();	
 			}
 			
-			animate(this._game).now({x:50,y:-15},70)
+			animate(this._gameView).now({x:50,y:-15},70)
 			.then({x:-50,y:20},70)
 			.then({x:50,y:30},70)
 			.then({x:-50,y:30},70)
 			.then({x:50,y:20},70)
 			.then({x:0, y:0},70);
 
-			if (this._game.getPlayerModel().getHearts() == 0) {
-				this._game.lose = true;
-				this._game.loseMessage = "You have lost all your hearts!";
+			if (this._gameView.getPlayerModel().getHearts() == 0) {
+				this._gameView.lose = true;
+				this._gameView.loseMessage = "You have lost all your hearts!";
 			}
 
 		}
