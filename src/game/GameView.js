@@ -24,7 +24,7 @@ import src.views.RuneView as RuneView;
 import ui.ParticleEngine as ParticleEngine;
 import src.views.LevelStartView as LevelStartView;
 import src.views.InfoView as InfoView;
-
+import src.views.dialogs.ChoiceDialogView as ChoiceDialogView;
 
 var game_on = false,
 	lang = 'en',
@@ -247,6 +247,11 @@ exports = Class(ui.View, function (supr) {
 		this.infoView = new InfoView({
 
 		});
+
+		this.choiceDialog = new ChoiceDialogView({
+			gameView: this
+		});
+		this.addSubview(this.choiceDialog);
 	};
 
 

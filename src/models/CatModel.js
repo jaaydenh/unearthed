@@ -9,8 +9,8 @@ exports = Class(TileModel, function (supr) {
 		opts = merge(opts, {
 			gameModel: opts.gameModel,
 			gameView: opts.gameView,
-			id: 103,
-			description: 'A loyal companion that loves finding bones. Rescue this creature to bring this companion along on future levels'
+			id: 122,
+			description: 'A feline companion that can be a big help when meeting witches'
 		});
 
 		supr(this, 'init', [opts]);

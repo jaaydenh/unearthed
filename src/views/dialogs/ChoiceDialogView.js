@@ -17,12 +17,15 @@ import src.util.Data as Data;
 exports = Class(DialogBackgroundView, function (supr) {
 	this.init = function (opts) {
 
+		this._gameView = opts.gameView;
+
 		supr(this, 'init', arguments);
 
 		this.style.visible = false;
 
 		this.canHandleEvents(true);
-
+		this.choiceB_cb = null;
+		this.choiceB_cb = null;
 		//this.game = opts.game;
 
 		this._dialogView = new BoxDialogView({
@@ -68,14 +71,14 @@ exports = Class(DialogBackgroundView, function (supr) {
 			horizontalAlign: 'left'
 		});
 
-		var exitButton = new BoxBorderView({
+		var choiceAButton = new BoxBorderView({
 			superview: this._dialogView,
-			x: 340,
+			x: 180,
 			y: 400,
 			width: 300,
 			height: 100,
 			image: itemStyle.BACKGROUND,
-			text: "Ok",
+			text: "Choice A",
 			fontFamily: itemStyle.FONT_FAMILY,
 			fontSize: itemStyle.FONT_SIZE,
 			textPadding: itemStyle.PADDING,
@@ -85,12 +88,42 @@ exports = Class(DialogBackgroundView, function (supr) {
 			horizontalAlign: itemStyle.ALIGN || 'center'
 		});
 
-		exitButton.on('InputSelect', bind(this, function () {
+		var choiceBButton = new BoxBorderView({
+			superview: this._dialogView,
+			x: 500,
+			y: 400,
+			width: 300,
+			height: 100,
+			image: itemStyle.BACKGROUND,
+			text: "Choice B",
+			fontFamily: itemStyle.FONT_FAMILY,
+			fontSize: itemStyle.FONT_SIZE,
+			textPadding: itemStyle.PADDING,
+			textColor: itemStyle.COLOR,
+			textOutline: itemStyle.STROKE_COLOR,
+			strokeWidth: itemStyle.STROKE_WIDTH,
+			horizontalAlign: itemStyle.ALIGN || 'center'
+		});
+
+		choiceAButton.on('InputSelect', bind(this, function () {
 			menu.hide();
+			 if (typeof this.choiceA_cb === "function") {
+    			this.choiceA_cb();
+   			}
 		}));
 
-
+		choiceBButton.on('InputSelect', bind(this, function () {
+			menu.hide();
+			if (typeof this.choiceB_cb === "function") {
+    			this.choiceB_cb();
+   			}
+		}));
 	};
+
+	this.setChoices = function(choiceA_cb, choiceB_cb) {
+		this.choiceA_cb = choiceA_cb;
+		this.choiceB_cb = choiceB_cb;
+	}
 
 	this.setDialog = function(message) {
 		this.dialogText.setText(message);

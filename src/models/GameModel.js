@@ -5,9 +5,11 @@ import src.models.OgreModel as OgreModel;
 import src.models.StoreModel as StoreModel;
 import src.models.NoisyFlowerModel as NoisyFlowerModel;
 import src.models.DogModel as DogModel;
+import src.models.CatModel as CatModel;
 import src.models.RabbitModel as RabbitModel;
 import src.models.SunModel as SunModel;
 import src.models.MoonModel as MoonModel;
+import src.models.WitchModel as WitchModel;
 import src.models.TileModel as TileModel;
 
 exports = Class(Emitter, function (supr) {
@@ -104,6 +106,20 @@ exports = Class(Emitter, function (supr) {
 			});
 		} else if (tileType == 'moon') {
 			tileModel = new MoonModel( 
+			{
+				gameModel: this,
+				gameView: this._gameView,
+				tileType: tileType
+			});
+		} else if (tileType == 'cat') {
+			tileModel = new CatModel( 
+			{
+				gameModel: this,
+				gameView: this._gameView,
+				tileType: tileType
+			});
+		} else if (tileType == 'witch') {
+			tileModel = new WitchModel( 
 			{
 				gameModel: this,
 				gameView: this._gameView,

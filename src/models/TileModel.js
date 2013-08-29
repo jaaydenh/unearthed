@@ -112,11 +112,11 @@ exports = Class(ui.View, function (supr) {
 		  this._description = 'Find the all the paths along with the travellers portal to exit this area.';
 		  break;
 		case "witch":
-		  this._id = 104;
+		 /* this._id = 104;
 		  this._stayVisible = true;
 		  this._scrambleAdjacent = true;
 		  this._creature = true;
-		  this._description = 'Witches love to confuse travellers with their magic but have a love for black cats';
+		  this._description = 'Witches love to confuse travellers with their magic but have a love for black cats';*/
 		  break;
 		case "goblinberries":
 		  this._id = 106;	
@@ -399,9 +399,9 @@ exports = Class(ui.View, function (supr) {
 		//	didStealOrShuffle = goblinEatsBerries(tile, gameScreen);
 		//}	
 
-		if (this._scrambleAdjacent == true) {
+		/*if (this._scrambleAdjacent == true) {
 			this._gameView.scrambleAdjacentTiles(this);
-		}
+		}*/
 
 		//if (tile.moveToInventory == true) {
 		//	gameScreen._playerModel.moveToInventory(tile);

@@ -17,6 +17,7 @@ import ui.resource.Image as Image;
 import ui.ViewPool as ViewPool;
 import src.views.DogItemView as DogItemView;
 import src.views.RabbitItemView as RabbitItemView;
+import src.views.CatItemView as CatItemView;
 
 exports = Class(DialogBackgroundView, function (supr) {
 	this.init = function (opts) {
@@ -231,6 +232,11 @@ exports = Class(DialogBackgroundView, function (supr) {
 			} else if (specials[i] == 'rabbit') {
 				special = new RabbitItemView({
 					tileType: 'rabbit',
+					levelStart: true
+				});
+			} else if (specials[i] == 'cat') {
+				special = new CatItemView({
+					tileType: 'cat',
 					levelStart: true
 				});
 			}

@@ -10,6 +10,7 @@ import ui.ImageView as ImageView;
 import src.views.InventoryItemView as InventoryItemView;
 import src.views.DogItemView as DogItemView;
 import src.views.RabbitItemView as RabbitItemView;
+import src.views.CatItemView as CatItemView;
 
 exports = Class(ui.View, function (supr) {
 
@@ -54,6 +55,12 @@ exports = Class(ui.View, function (supr) {
 		} else if (item.tile == 'rabbit') {
 			inventoryItem = new RabbitItemView({
 				tileType: 'rabbit',
+				levelStart: false,
+				game: this.game
+			});
+		} else if (item.tile == 'cat') {
+			inventoryItem = new CatItemView({
+				tileType: 'cat',
 				levelStart: false,
 				game: this.game
 			});

@@ -231,7 +231,7 @@ exports = Class(ui.View, function (supr) {
 			height: gameConstants.GAME_HEIGHT - 40,
 			title: this._tileType,
 			items: [
-				{image: 'resources/images/gametiles/' + this._tileType + '.png', height: gameConstants.TILE_SIZE, width: gameConstants.TILE_SIZE, align: 'center'},
+				{image: 'resources/images/gametiles/' + tileImage + '.png', height: gameConstants.TILE_SIZE, width: gameConstants.TILE_SIZE, align: 'center'},
 				{text: this._tileModel.getDescription()},
 				{item: 'Ok', action: bind(this, '_showTile')}
 			],

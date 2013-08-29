@@ -19,6 +19,7 @@ var si = 'sign';
 var f  = 'flowers';
 var st = 'store';
 var sf = 'singingflower';
+var ct = 'cat';
 var x  = null;
 
 exports.list = ["forest", "darkforest"];
@@ -144,42 +145,42 @@ exports["forest"] = [
 	], [
 		{
 			levelNumber: 8,
-			isDaytime: true,
-			keysToWin: 2,
+			isDaytime: false,
+			keysToWin: 1,
 			goalTiles: [d],
-			goalText: 'Find the traveler\'s portal',
-			pathsNeeded: 3,
+			goalText: 'Escape the gauntlet of ogres!!!',
+			pathsNeeded: 0,
 			hearts: 3,
 			gridWidth: 6,
 			gridHeight: 5,
 			startingRunes: 3,
 			backgroundImage: 'swampbackground'
 		},
-		[c,c,c,c,r,r,r,r,r,r,r,r,r,r,r,r,k,c,c,c,c,c,c,si,f,f,o,o,o,sf,ca,ca,l,st,w,tr,tr,g,g,g,s,k,k,m,d],
+		[c,c,c,c,r,r,r,r,r,r,r,r,r,r,r,r,k,r,r,c,c,c,c,c,c,c,si,f,o,o,o,o,o,o,ca,ca,l,st,w,tr,g,g,g,s,d],
 		[ca,ca,ca,ca,ca]
 	], [
 		{
 			levelNumber: 9,
 			isDaytime: true,
-			keysToWin: 3,
-			goalTiles: [d],
-			goalText: 'Find the traveler\'s portal',
-			pathsNeeded: 3,
+			keysToWin: 1,
+			goalTiles: [d,ct],
+			goalText: 'Find the mysterious cat',
+			pathsNeeded: 0,
 			hearts: 4,
 			gridWidth: 6,
 			gridHeight: 5,
 			startingRunes: 3,
 			backgroundImage: 'swampbackground'
 		},
-		[c,c,c,c,r,r,r,r,r,r,r,r,c,c,r,r,r,c,c,c,c,c,si,f,f,o,o,o,o,ca,sf,ca,ca,l,st,w,tr,tr,g,g,g,k,k,k,d],
+		[c,c,c,c,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,c,c,c,c,c,c,si,si,f,f,o,o,o,ca,sf,ca,l,g,g,g,k,ct,d],
 		[ca,ca,ca,ca,ca]
 	], [
 		{
 			levelNumber: 10,
 			isDaytime: true,
-			keysToWin: 0,
+			keysToWin: 2,
 			goalTiles: [d],
-			goalText: 'Find the traveler\'s portal',
+			goalText: 'Navigate the enclave of witches',
 			pathsNeeded: 3,
 			hearts: 4,
 			gridWidth: 6,
@@ -187,7 +188,7 @@ exports["forest"] = [
 			startingRunes: 3,
 			backgroundImage: 'swampbackground'
 		},
-		[c,c,c,c,r,r,r,r,r,r,r,r,r,c,c,c,c,si,f,f,o,o,o,o,ca,ca,ca,l,st,w,tr,tr,g,g,g,p,p,p,d],
+		[c,c,c,c,r,r,r,r,r,r,r,r,r,r,r,r,c,c,c,c,si,f,f,o,o,o,o,ca,l,st,w,w,w,w,w,w,w,g,g,g,k,k,d],
 		[ca,ca,ca,ca,ca]
 	]
 ];
