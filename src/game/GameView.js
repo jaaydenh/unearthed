@@ -320,6 +320,7 @@ exports = Class(ui.View, function (supr) {
 		this.goalTiles = data.goalTiles;
 		this.goalText = data.goalText;
 		this.pathsNeeded = data.pathsNeeded;
+		this.caveTiles = data.caveTiles;
 		this.goblinsVisible = 0;
 		this.keysToWin = data.keysToWin;
 		this._doorLocked = false;
@@ -464,6 +465,7 @@ exports = Class(ui.View, function (supr) {
 			on('MoveToTile', bind(tileView, 'onMoveToTile')).
 			on('Wake', bind(tileView, 'onWake')).
 			on('Reveal', bind(tileView, 'onReveal')).
+			on('Activate', bind(tileView, 'onActivate')).
 			on('SetGlow', bind(tileView, 'onSetGlow'));
 
 		this.addSubview(tileView);
@@ -672,6 +674,22 @@ exports = Class(ui.View, function (supr) {
 
 		tile.removeView();
 		this.addTileView(tile.getTileNumber(), newTileModel);
+	}
+
+	this.swapTile = function(tileToRemove, tileToAdd, activateTile) {
+		if (tileToRemove.getTileType() == 'goblin') {
+			this._gameStatusModel.removeGoblin();
+		}
+		
+		tileToAdd.setTileNumber(tileToRemove.getTileNumber());	
+		currentLayout[tileToRemove.getTileNumber()] = tileToAdd;
+
+		tileToRemove.removeView();
+		this.addTileView(tileToRemove.getTileNumber(), tileToAdd);	
+
+		if (activateTile == true) {
+			tileToAdd.emit('Activate');
+		}
 	}
 
 	this.getAllTileWithRule = function(rule) {

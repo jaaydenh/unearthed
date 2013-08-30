@@ -71,6 +71,17 @@ exports = Class(ui.View, function (supr) {
 			this.activateTile();
 		}));
 	}
+
+	this.onActivate = function() {
+		this._animator.now(bind(this, function() {
+			this._tileview.setImage(this.tile_img);	
+		}))
+		.wait(400)
+		.then(bind(this, function() {
+			this.activateTile();
+		}))
+	}
+
 	this.onUpdateImage = function(tileType) {
 		this.tile_img = new Image({url: "resources/images/gametiles/" + tileType + ".png"});
 		if (this._tileModel._visible == true) {

@@ -10,19 +10,22 @@ exports = Class(TileModel, function (supr) {
 		opts = merge(opts, {
 			gameMode: opts.gameModel,
 			gameView: opts.gameView,
-			id: 123,
-			description: 'A very noisy flower which has been known to wakeup nearby sleeping monsters'
+			id: 112,
+			description: 'Gold is valuable and get be exchanged for useful items'
 		});
 
 		supr(this, 'init', [opts]);
+
+		this._upgradeTile = "goldbag";
+		this._stayVisible = true;
+		this._stealInRow = true;
+		this._tileToSteal = "goldcoin";
+		this._stealingTile = "goblin"
+		this._stealInColumn = true;
 	};
 
 	this.activateTile = function () {
-
-		var sleepingTiles = this._gameView.getAllTileWithRule("_sleeping");
-
-		sleepingTiles.forEach(function(tile) {
-			tile.wake();
-		})
+		
+		this.threeInARow();
 	}
 });

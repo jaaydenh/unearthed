@@ -11,6 +11,10 @@ import src.models.SunModel as SunModel;
 import src.models.MoonModel as MoonModel;
 import src.models.WitchModel as WitchModel;
 import src.models.TileModel as TileModel;
+import src.models.CaveModel as CaveModel;
+import src.models.LostModel as LostModel;
+import src.models.TrapModel as TrapModel;
+import src.models.GoldCoinModel as GoldCoinModel;
 
 exports = Class(Emitter, function (supr) {
 	
@@ -58,8 +62,8 @@ exports = Class(Emitter, function (supr) {
 	this.removeTopTileFromDeck = function() {
 		return this._tileDeck.pop();
 	}
-	this.addTileToDeck = function(tileType) {
 
+	this.createTileModel = function(tileType) {
 		var tileModel;
 		
 		if (tileType == 'dog') {
@@ -125,6 +129,34 @@ exports = Class(Emitter, function (supr) {
 				gameView: this._gameView,
 				tileType: tileType
 			});
+		} else if (tileType == 'cave') {
+			tileModel = new CaveModel( 
+			{
+				gameModel: this,
+				gameView: this._gameView,
+				tileType: tileType
+			});
+		} else if (tileType == 'lost') {
+			tileModel = new LostModel( 
+			{
+				gameModel: this,
+				gameView: this._gameView,
+				tileType: tileType
+			});
+		} else if (tileType == 'trap') {
+			tileModel = new TrapModel( 
+			{
+				gameModel: this,
+				gameView: this._gameView,
+				tileType: tileType
+			});
+		} else if (tileType == 'goldcoin') {
+			tileModel = new GoldCoinModel( 
+			{
+				gameModel: this,
+				gameView: this._gameView,
+				tileType: tileType
+			});
 		} else {
 			tileModel = new TileModel( 
 			{
@@ -133,6 +165,13 @@ exports = Class(Emitter, function (supr) {
 				tileType: tileType
 			});
 		}
+
+		return tileModel;
+	}
+
+	this.addTileToDeck = function(tileType) {
+
+		var tileModel = this.createTileModel(tileType);
 
 		this._tileDeck.push(tileModel);
 	}

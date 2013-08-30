@@ -23,8 +23,6 @@ exports = Class(TileModel, function (supr) {
 
 		this._dangerous = true;
 		this._stayVisible = false;
-		this._causeDamage = true;
-		this._sleepInDay = true;
 		this._damage = 1;
 		this._creature = true;
 

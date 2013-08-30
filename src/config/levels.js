@@ -20,6 +20,7 @@ var f  = 'flowers';
 var st = 'store';
 var sf = 'singingflower';
 var ct = 'cat';
+var cv = 'cave';
 var x  = null;
 
 exports.list = ["forest", "darkforest"];
@@ -39,12 +40,13 @@ exports["forest"] = [
 			gridWidth: 6,
 			gridHeight: 5,
 			startingRunes: 0,
-			backgroundImage: 'dirtstonebackground'
+			backgroundImage: 'dirtstonebackground',
+			caveTiles: [o,g,w]
 		},
 		// tile deck, real deck for level 1
 		[r,r,r,r,r,r,r,r,r,d,r,r,r,r,r,r,r,f,f,f,f,f,l,c,c,c,c,c,c,c,c,si,si,si,o,o,o,g,g],
 		// debug tile deck for level 1
-		//[r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,si,si,st,st,st,st,st,o,o,o,o,o,o,o,o,o,o,g,g,p,d],
+		//[r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,tr,tr,tr,c,c,c,c,c,c,c,c,c,c,c,c,c,c,c,c,cv,cv,cv,cv,o,o,g,g,p,d],
 		[ca,ca,ca,ca,ca]
 	], [
 		{
@@ -58,9 +60,10 @@ exports["forest"] = [
 			gridWidth: 6,
 			gridHeight: 5,
 			startingRunes: 3,
-			backgroundImage: 'dirtstonebackground'
+			backgroundImage: 'dirtstonebackground',
+			caveTiles: [o,g,c]
 		},
-		[r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,f,f,f,f,f,g,o,o,o,si,si,si,l,l,c,c,c,c,c,c,d],
+		[r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,f,f,f,f,f,g,o,o,o,si,si,si,l,l,c,c,c,c,c,c,cv,d],
 		[ca,ca,ca,ca,ca]
 	], [
 		{
@@ -74,9 +77,10 @@ exports["forest"] = [
 			gridWidth: 6,
 			gridHeight: 5,
 			startingRunes: 3,
-			backgroundImage: 'dirtstonebackground'
+			backgroundImage: 'dirtstonebackground',
+			caveTiles: [o,g,c]
 		},
-		[r,c,r,c,r,c,r,d,r,r,r,r,r,si,si,si,f,f,f,c,c,c,c,c,c,o,o,o,g,g,r,r,r,r,r,r,l,l,k],
+		[r,c,r,c,r,c,r,d,r,r,r,r,r,si,si,si,f,f,f,c,c,c,c,c,c,o,o,o,g,g,r,r,r,r,r,r,l,l,cv,k],
 		[ca,ca,ca,ca,ca]
 	], [
 		{
@@ -90,9 +94,10 @@ exports["forest"] = [
 			gridWidth: 6,
 			gridHeight: 5,
 			startingRunes: 3,
-			backgroundImage: 'swampbackground'
+			backgroundImage: 'swampbackground',
+			caveTiles: [o,g,c]
 		},
-		[c,c,c,c,r,r,r,r,r,r,r,r,r,r,r,r,c,c,c,c,c,c,si,si,f,f,o,o,o,sf,sf,ca,ca,st,l,l,g,g,d,dg],
+		[c,c,c,c,r,r,r,r,r,r,r,r,r,r,r,r,c,c,c,c,c,c,si,si,f,f,o,o,o,sf,sf,ca,ca,st,l,l,g,g,cv,d,dg],
 		[ca,ca,ca,ca,ca]
 	], [
 		{
@@ -106,9 +111,10 @@ exports["forest"] = [
 			gridWidth: 6,
 			gridHeight: 5,
 			startingRunes: 3,
-			backgroundImage: 'dirtonlybackground'
+			backgroundImage: 'dirtonlybackground',
+			caveTiles: [o,g,w,c]
 		},
-		[r,r,r,c,r,c,r,c,r,k,r,r,r,r,r,r,r,si,si,f,f,c,c,c,c,c,c,g,g,g,g,g,g,o,o,o,ca,ca,l,d],
+		[r,r,r,c,r,c,r,c,r,k,r,r,r,r,r,r,r,si,si,f,f,c,c,c,c,c,c,g,g,g,g,g,g,o,o,o,ca,ca,l,cv,d],
 		[ca,ca,ca,ca,ca]
 	], [
 		{
@@ -122,9 +128,10 @@ exports["forest"] = [
 			gridWidth: 6,
 			gridHeight: 5,
 			startingRunes: 3,
-			backgroundImage: 'dirtonlybackground'
+			backgroundImage: 'dirtonlybackground',
+			caveTiles: [o,g,w,c]
 		},
-		[r,c,r,c,r,c,r,k,r,r,k,k,k,r,r,r,r,r,r,r,c,c,c,c,c,c,si,si,f,f,o,o,o,ca,ca,l,g,g,g,g,d],
+		[r,c,r,c,r,c,r,k,r,r,k,k,k,r,r,r,r,r,r,r,c,c,c,c,c,c,si,si,f,f,o,o,o,ca,ca,l,g,g,g,g,cv,d],
 		[ca,ca,ca,ca,ca]
 	], [
 		{
@@ -138,9 +145,10 @@ exports["forest"] = [
 			gridWidth: 6,
 			gridHeight: 5,
 			startingRunes: 3,
-			backgroundImage: 'dirtonlybackground'
+			backgroundImage: 'dirtonlybackground',
+			caveTiles: [o,g,w,c]
 		},
-		[c,c,c,c,r,r,r,r,r,r,r,r,rb,r,r,r,r,r,c,c,c,c,c,c,si,f,f,o,o,o,o,tr,sf,ca,ca,ca,l,st,w,g,g,g,d],
+		[c,c,c,c,r,r,r,r,r,r,r,r,rb,r,r,r,r,r,c,c,c,c,c,c,si,f,f,o,o,o,o,tr,sf,ca,ca,ca,l,st,w,g,g,g,cv,d],
 		[ca,ca,ca,ca,ca]
 	], [
 		{

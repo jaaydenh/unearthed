@@ -7,8 +7,6 @@ import animate;
 import src.util.Utility as Utility;
 import src.models.RuneModel as RuneModel;
 import src.views.RuneView as RuneView;
-import src.views.StoreView as StoreView;
-import src.views.TrapGameView as TrapGameView;
 
 var X_OFFSET = 30;
 var Y_OFFSET = 0;
@@ -49,7 +47,6 @@ exports = Class(ui.View, function (supr) {
 
 	this._setDefaults = function() {
 		this._visible = false;
-		this._causeDamage = false;
 		this._stayVisible = false;
 		this._positionRule = '';
 		this._id = 0;
@@ -74,18 +71,12 @@ exports = Class(ui.View, function (supr) {
 		this._stealingTile = '';
 		this._stealInColumn = false;
 		this._threeInaRow = false;
-		this._trap = false;
 		this._shuffleInitiator = false;
 		this._rune = false;
 		this._creature = false;
 		this._campfire = false;
-		this._store = false;
 		this._upgradeTile = '';
-		this._sleepInDay = false;
 		this._sleeping = false;
-		this._sleepingtile = '';
-		this._wakingtile = '';
-		this._isLoud = false;
 		this._goalActive = false;
 	}
 
@@ -97,26 +88,12 @@ exports = Class(ui.View, function (supr) {
 
 		switch (this._tileType)
 		{
-		case "lost":
-		  this._id = 101;
-		  this._hideAll = true;
-		  this._notAdjacent = true;
-		  this._notAdjacentTile = 'path';
-		  this._description = 'You are lost in the forest. Everything uncovered is now hidden';
-		  break;
 		case "path":
 		  this._id = 102;
 		  this._adjacent = true;
 		  this._diagonal = true;
 		  this._adjacentTile = 'path';
 		  this._description = 'Find the all the paths along with the travellers portal to exit this area.';
-		  break;
-		case "witch":
-		 /* this._id = 104;
-		  this._stayVisible = true;
-		  this._scrambleAdjacent = true;
-		  this._creature = true;
-		  this._description = 'Witches love to confuse travellers with their magic but have a love for black cats';*/
 		  break;
 		case "goblinberries":
 		  this._id = 106;	
@@ -128,18 +105,6 @@ exports = Class(ui.View, function (supr) {
 		  this._moveToInventory = true;
 		  this._addHeart = true;
 		  this._description = 'test description';
-		  break;
-		case "moon":
-		  /*this._id = 108;
-		  this._stayVisible = true;
-		  this._changeToNight = true;
-		  this._description = 'test description';*/
-		  break;
-		case "sun":
-		  /*this._id = 109;
-		  this._stayVisible = true;
-		  this._changeToDay = true;
-		  this._description = 'test description';*/
 		  break;
 		case "door":
 		  this._id = 110;
@@ -163,17 +128,6 @@ exports = Class(ui.View, function (supr) {
 		  this._creature = true;
 		  this._description = 'Harmless when found alone but if a group of 3 or more is visible, you will be captured and your journey will be over.';
 		  break;
-		case "goldcoin":
-		  this._id = 112;
-		  this._threeInaRow = true;
-		  this._upgradeTile = "goldbag";
-		  this._stayVisible = true;
-		  this._stealInRow = true;
-		  this._tileToSteal = "goldcoin";
-		  this._stealingTile = "goblin"
-		  this._stealInColumn = true;
-		  this._description = 'Gold is valuable and get be exchanged for useful items';
-		  break;
 		case "key":
 		  this._id = 113;
 		  this._stayVisible = true;
@@ -185,14 +139,6 @@ exports = Class(ui.View, function (supr) {
 		case "rock":
 		  this._id = 115;	
 		  this._description = 'Mostly uninteresting but the number of bones can tell how many dangerous creatures are nearby';
-		break;
-		case "trap":
-		  this._id = 116;
-		  this._adjacent = true;
-		  this._adjacentTile = "goldcoin"
-		  this._dangerous = true;
-		  this._trap = true;
-		  this._description = 'Avoid traps at all cost. There is the risk of getting captured by goblins';
 		break;
 		case "campfire":
 		  this._id = 117;
@@ -217,6 +163,55 @@ exports = Class(ui.View, function (supr) {
 		}
 	}
 
+	this.threeInARow = function() {
+
+		//Check row for 3 in a row
+		var tileRow = this._gameView.getTileRow(this._tileNumber);
+		var sequentialTiles = [];
+
+		for (var i = 0; i < tileRow.length; i++) {
+			var tile = tileRow[i];
+			if (tile.getTileType() == this._tileType && tile.isVisible() == true) {
+				sequentialTiles.push(tile.getTileNumber());
+			} else {
+				sequentialTiles.length = 0;
+			}
+
+			if (sequentialTiles.length == 3) {
+				break;
+			}
+		}
+		//Check col for 3 in a row
+		if (sequentialTiles.length < 3) {
+			sequentialTiles.length = 0;
+			var tileCol = this._gameView.getTileCol(this._tileNumber);
+			for (var i = 0; i < tileCol.length; i++) {
+				var tile = tileCol[i];
+				if (tile.getTileType() == this._tileType && tile.isVisible() == true) {
+					sequentialTiles.push(tile.getTileNumber());
+				} else {
+					sequentialTiles.length = 0;
+				}
+
+				if (sequentialTiles.length == 3) {
+					break;
+				}
+			}
+		}
+		// if 3 in a row
+		if (sequentialTiles.length == 3) {
+			var replaceTile = true;
+			sequentialTiles.forEach(bind(this,function(tileNum) {
+				if (tileNum != this._tileNumber) {
+					// move adjacent tiles to current tile and replace adjacent tiles with tile from deck
+					this._gameView.getTileInLayout(tileNum).moveToTile(this._tileNumber, replaceTile);		
+				}
+			}))
+			// replace current tile with upgraded tile 
+			this.setTileType(this._upgradeTile);
+		}
+	}
+	
 	this.getPositionRule = function() {
 		return this._positionRule;
 	}
@@ -311,16 +306,6 @@ exports = Class(ui.View, function (supr) {
 			this._gameModel.updateVisibleGoblins(1);
 		}
 
-		// replace this tile with a new tile hide this tile after 1 second, replace with a new tile then hide all tiles
-		if (this._hideAll == true) {
-			
-			animate(this).wait(1000)
-			.then(bind(this, function () {
-				this._gameView.replaceTile(this);
-				this._gameView.resetAllTiles();	
-			}))
-		}
-
 		if (this._campfire == true) {
 
 			var runeModel = new RuneModel( 
@@ -347,73 +332,9 @@ exports = Class(ui.View, function (supr) {
 			}))
 		}
 
-		if (this._threeInaRow == true) {
-			//Check row for 3 in a row
-			var tileRow = this._gameView.getTileRow(this._tileNumber);
-			var sequentialTiles = [];
-
-			for (var i = 0; i < tileRow.length; i++) {
-				var tile = tileRow[i];
-				if (tile.getTileType() == this._tileType && tile.isVisible() == true) {
-					sequentialTiles.push(tile.getTileNumber());
-				} else {
-					sequentialTiles.length = 0;
-				}
-
-				if (sequentialTiles.length == 3) {
-					break;
-				}
-			}
-			//Check col for 3 in a row
-			if (sequentialTiles.length < 3) {
-				sequentialTiles.length = 0;
-				var tileCol = this._gameView.getTileCol(this._tileNumber);
-				for (var i = 0; i < tileCol.length; i++) {
-					var tile = tileCol[i];
-					if (tile.getTileType() == this._tileType && tile.isVisible() == true) {
-						sequentialTiles.push(tile.getTileNumber());
-					} else {
-						sequentialTiles.length = 0;
-					}
-
-					if (sequentialTiles.length == 3) {
-						break;
-					}
-				}
-			}
-			// if 3 in a row
-			if (sequentialTiles.length == 3) {
-				var replaceTile = true;
-				sequentialTiles.forEach(bind(this,function(tileNum) {
-					if (tileNum != this._tileNumber) {
-						// move adjacent tiles to current tile and replace adjacent tiles with tile from deck
-						this._gameView.getTileInLayout(tileNum).moveToTile(this._tileNumber, replaceTile);		
-					}
-				}))
-				// replace current tile with upgraded tile 
-				this.setTileType(this._upgradeTile);
-			}
-		}
-
 		//if (tile.removeGoblin == true) {
 		//	didStealOrShuffle = goblinEatsBerries(tile, gameScreen);
 		//}	
-
-		/*if (this._scrambleAdjacent == true) {
-			this._gameView.scrambleAdjacentTiles(this);
-		}*/
-
-		//if (tile.moveToInventory == true) {
-		//	gameScreen._playerModel.moveToInventory(tile);
-		//}
-
-		if (this._trap == true) {
-			this._gameView.trapGameView = new TrapGameView({
-				game: this._gameView
-			})
-			this._gameView.addSubview(this._gameView.trapGameView);
-			this._gameView.trapGameView.show();
-		}	
 		
 		/*if (tile.stealInRow != null && didStealOrShuffle == false) {
 		  	if (tile.stealInRow == true) {
