@@ -1,7 +1,6 @@
 import src.constants.gameConstants as gameConstants;
 import src.models.TileModel as TileModel;
 import src.sounds.soundManager as soundManager;
-import src.util.Data as Data;
 
 exports = Class(TileModel, function (supr) {
 
@@ -10,28 +9,25 @@ exports = Class(TileModel, function (supr) {
 		opts = merge(opts, {
 			gameModel: opts.gameModel,
 			gameView: opts.gameView,
-			id: 124,
-			description: 'Caves hold unknown treasures or dangers'
+			id: 125,
+			description: 'Spiders usually just go splat!!! but sometimes can be a bit more dangerous'
 		});
 
 		supr(this, 'init', [opts]);
 
 		this._activatedCount = 0;
+		this._splat = false;
 	};
 
 	this.activateTile = function () {
 
-		if (this._activatedCount > 0) {
-			var caveTiles = this._gameView.caveTiles;
-			var tileIndex = Math.floor(Math.random() * caveTiles.length);
-			var tileType = caveTiles[tileIndex];
+		if (this._activatedCount > 0 && this._splat == false) {
 
-			var tileModel = this._gameModel.createTileModel(tileType);
-
-			this._gameView.swapTile(this, tileModel, true);
+			soundManager.play('splat');
+			this.updateImage('spider_splat');
+			this._splat = true;
 		}
 
 		this._activatedCount++;
 	}
-
 });

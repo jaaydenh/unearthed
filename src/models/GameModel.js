@@ -15,6 +15,7 @@ import src.models.CaveModel as CaveModel;
 import src.models.LostModel as LostModel;
 import src.models.TrapModel as TrapModel;
 import src.models.GoldCoinModel as GoldCoinModel;
+import src.models.SpiderModel as SpiderModel;
 
 exports = Class(Emitter, function (supr) {
 	
@@ -152,6 +153,13 @@ exports = Class(Emitter, function (supr) {
 			});
 		} else if (tileType == 'goldcoin') {
 			tileModel = new GoldCoinModel( 
+			{
+				gameModel: this,
+				gameView: this._gameView,
+				tileType: tileType
+			});
+		} else if (tileType == 'spider') {
+			tileModel = new SpiderModel( 
 			{
 				gameModel: this,
 				gameView: this._gameView,

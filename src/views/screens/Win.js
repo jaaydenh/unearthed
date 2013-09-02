@@ -2,14 +2,10 @@ import animate;
 import ui.View as View;
 import ui.ImageView as ImageView;
 import ui.TextView as TextView;
-
 import src.config.levels as levels;
 import src.util.Data as Data;
 import src.views.DiscoveryView as DiscoveryView;
 
-/**
- * Win module
- */
 exports = Class(View, function(supr) {
 
 	var BG_WIDTH = 1024,

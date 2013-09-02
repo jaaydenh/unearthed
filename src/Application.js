@@ -1,19 +1,13 @@
 import device;
 import AudioManager;
-import src.flow.Flow as Flow;
+import src.views.screens.Flow as Flow;
 import src.config.levels;
 import src.util.Data as Data;
 import src.sounds.soundManager as soundManager;
+import src.views.screens.Title as Title;
+import src.constants.gameConstants as gameConstants;
 
 var worlds = Data.get("worlds") || {};
-
-src.config.levels.list.forEach(function(name){
-	!(name in worlds) && (worlds[name] = {
-		unlocked: 1,
-		last: -1,
-		currentLevel: 1
-	});
-});
 
 var gold = Data.get("gold") || 0;
 Data.setItem("gold", gold);
@@ -27,23 +21,18 @@ Data.set("inventory", inventory);
 var specials = Data.get("specials") || [];
 Data.set("specials", specials);
 
-if ( false ) { // localStorage debugging
-	worlds = {
-		"forest": {
-			unlocked: 12,
-			last: 10
-		},
-		"darkforest": {
-			unlocked: 36,
-			last: 14
-		}
-	};
-}
+src.config.levels.list.forEach(function(name){
+	!(name in worlds) && (worlds[name] = {
+		unlocked: 1,
+		last: -1,
+		currentLevel: 1
+	});
+});
 
 Data.set("worlds", worlds);
 
-var boundsWidth = 1024;
-var boundsHeight = 576;
+var boundsWidth = gameConstants.GAME_WIDTH;
+var boundsHeight = gameConstants.GAME_HEIGHT;
 
 exports = Class(GC.Application, function () {
 	
@@ -76,13 +65,18 @@ exports = Class(GC.Application, function () {
 		
 		this.scaleUI();
 		
-		this.flow = new Flow({ 
+		this.title = new Title({
+			superview: this.view,
+			parent: this
+		});
+
+		/*this.flow = new Flow({ 
 			superview: this.view,
 			width: boundsWidth,
 			height: boundsHeight,
 			clip: true,
 			level: undefined
-		});
+		});*/
 
 		this.initAudio();
 	};

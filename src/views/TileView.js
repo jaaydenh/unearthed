@@ -8,6 +8,7 @@ import src.constants.gameConstants as gameConstants;
 import menus.constants.menuConstants as menuConstants;
 import src.sounds.soundManager as soundManager;
 import ui.ParticleEngine as ParticleEngine;
+import ui.SpriteView as SpriteView;
 
 var default_img;
 
@@ -134,6 +135,9 @@ exports = Class(ui.View, function (supr) {
 			soundManager.play('step');	
 		}
 		
+		//this._tileview.stopAnimation();
+		//this._tileview.style.visible = true;
+
 		var shift = ((gameConstants.TILE_SIZE*1.4)-gameConstants.TILE_SIZE)/2;
 		
 		this._animator.now({ opacity:0,zIndex:20}, 300, animate.easeIn).then(bind(this, function() {
@@ -154,12 +158,13 @@ exports = Class(ui.View, function (supr) {
 					this._tileview.setImage(default_img);
 					this._game.peekActive(false);
 					this._game.unlock();
-				}
+				}	
 			}
 		));
 	
 	};
 	this.activateTile = function() {
+		this._tileModel.setActivationDecay(0);
 		this._tileModel.setVisible(true);
 		this._tileModel.activateTile();
 		this._tileModel.updateGame();
@@ -219,6 +224,7 @@ exports = Class(ui.View, function (supr) {
 	this.onReset = function() {
 		this._animator.now({ opacity: 0 }, 100, animate.easeIn).then(bind(this, function () {
 			this._tileview.setImage(default_img);
+			this._glowview.style.visible = false;
 		})).then({ opacity: 1}, 300, animate.easeOut);
 	};
 
@@ -250,6 +256,8 @@ exports = Class(ui.View, function (supr) {
 			showTransitionTime: 400,
 			hideTransitionMethod: menuConstants.transitionMethod.FADE
 		});
+
+		//this._tileview.startAnimation('default', {loop: true, randomFrame: true});
 	}
 
 	this.onSetGlow = function(visible) {
@@ -278,6 +286,10 @@ exports = Class(ui.View, function (supr) {
 
 		this._tileview = new ui.ImageView({
 			superview: this._inputview,
+			//url: 'resources/images/gametiles/tree/tree',
+			//frameRate:16,
+			//defaultAnimation: 'default',
+			//autoStart: true,
 			image: default_img,
 			x: 0,
 			y: 0,
@@ -285,6 +297,8 @@ exports = Class(ui.View, function (supr) {
 			height: gameConstants.TILE_SIZE,
 			zIndex: 5
 		});
+
+
 
 		this._glowview = new ui.ImageView({
 			superview: this._inputview,
@@ -319,7 +333,11 @@ exports = Class(ui.View, function (supr) {
 			}))
 
 			if (isTileSeen == true) {
-				this._showTile();
+				if (this._tileModel.isVisible() == false) {					
+					this._showTile();
+				} else {
+					this.activateTile();
+				}
 			} else {
 				this._game.tilesSeen.push(this._tileModel._id);
 				Data.set("tilesSeen", this._game.tilesSeen);

@@ -1,12 +1,9 @@
 import animate;
-import ui.View;
 import ui.ImageView;
 import ui.SpriteView as SpriteView;
 import ui.resource.Image as Image;
 import src.util.Data as Data;
-import menus.views.DocumentView as DocumentView;
 import src.constants.gameConstants as gameConstants;
-import menus.constants.menuConstants as menuConstants;
 
 var default_img;
 
@@ -14,10 +11,6 @@ exports = Class(SpriteView, function (supr) {
 
 	this.init = function (opts) {
 
-		/*opts = merge(opts, {
-			width:	100,
-			height: 100
-		});*/
 		opts = merge(
 				opts,
 				{

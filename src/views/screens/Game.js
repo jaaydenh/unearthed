@@ -1,7 +1,7 @@
 import animate;
 import ui.View as View;
 import ui.ImageView as ImageView;
-import src.game.GameView as GameView;
+import src.views.GameView as GameView;
 import src.config.levels as levels;
 import src.util.Data as Data;
 
@@ -201,7 +201,6 @@ exports = Class(View, function (supr) {
 
 	this.close = function() {
 		this.flow.removeSubview(this);
-		this.game.cleanup();
 		this.removeSubview(this.game);
 	};
 

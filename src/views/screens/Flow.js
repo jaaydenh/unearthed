@@ -2,23 +2,23 @@ import animate;
 import ui.ImageView as ImageView;
 import ui.View as View;
 
-import src.flow.WorldSelect as WorldSelect;
-import src.flow.Game as Game;
-import src.flow.Win as Win;
-import src.flow.Lose as Lose;
+import src.views.screens.WorldSelect as WorldSelect;
+import src.views.screens.Game as Game;
+import src.views.screens.Win as Win;
+import src.views.screens.Lose as Lose;
 
 import src.util.Data as Data;
 import ui.TextView;
 import src.sounds.soundManager as soundManager;
 
 import adventuremap.AdventureMap as AdventureMap;
-import ..settings.gridSettings as gridSettings;
-import ..settings.nodeSettings as nodeSettings;
-import ..settings.pathSettings as pathSettings;
-import ..settings.tileSettings as tileSettings;
+import src.settings.gridSettings as gridSettings;
+import src.settings.nodeSettings as nodeSettings;
+import src.settings.pathSettings as pathSettings;
+import src.settings.tileSettings as tileSettings;
 
 import src.constants.debugConstants as debugConstants;
-import ..data;
+import .data;
 
 exports = Class(View, function(supr) {
 

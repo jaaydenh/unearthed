@@ -14,6 +14,11 @@ exports.files = {
       volume: 1,
       background: false
     },
+    splat: {
+      path: 'effect',
+      volume: 1,
+      background: false
+    },
     step1: {
       path: 'effect',
       volume: 0.3,

@@ -33,6 +33,7 @@ exports = Class(ui.View, function (supr) {
 		this._tileNumber = -1;
 		this._defaultTileType = 'tree';
 		this._bones = 0;
+		this._activationDecay = 0;
 
 		supr(this, 'init', [opts]);
 
@@ -163,6 +164,14 @@ exports = Class(ui.View, function (supr) {
 		}
 	}
 
+	this.setActivationDecay = function(decay) {
+		this._activationDecay = decay;
+	}
+
+	this.getActivationDecay = function() {
+		return this._activationDecay;
+	}
+
 	this.threeInARow = function() {
 
 		//Check row for 3 in a row
@@ -263,6 +272,8 @@ exports = Class(ui.View, function (supr) {
 	this.updateGame = function() {
 		this._gameView.checkGoblinsVisible();
 		this._gameView.checkHintTileStates();
+		this._gameView.updateTileVisibility();
+
 		var isGoalTile = false;
 
 		for (var i =0 ;i<this._gameView.goalTiles.length;i++) {
@@ -286,9 +297,9 @@ exports = Class(ui.View, function (supr) {
 
 		this._gameView.checkGameStatus();
 
-		if (this._stayVisible === false && this._gameModel.isDaytime() == false) {
-			this.resetTile();
-		}	
+		//if (this._stayVisible === false && this._gameModel.isDaytime() == false) {
+		//	this.resetTile();
+		//}	
 	}
 
 	this.moveToTile = function(tileNum, replaceTile) {
@@ -379,5 +390,6 @@ exports = Class(ui.View, function (supr) {
 			this._gameModel.updateVisibleGoblins(-1);
 		}
 		this._visible = false;
+		this._activatedCount = 0
 	};
 });
