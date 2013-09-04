@@ -3,16 +3,11 @@ import animate;
 import ui.View as View;
 import ui.TextView as TextView;
 import ui.ImageView as ImageView;
-
 import menus.constants.menuConstants as menuConstants;
-
 import menus.views.components.BoxBorderView as BoxBorderView;
 import menus.views.components.BoxDialogView as BoxDialogView;
 import menus.views.components.DialogBackgroundView as DialogBackgroundView;
-
 import src.constants.gameConstants as gameConstants;
-import device;
-import src.util.Data as Data;
 
 exports = Class(DialogBackgroundView, function (supr) {
 	this.init = function (opts) {
@@ -31,7 +26,7 @@ exports = Class(DialogBackgroundView, function (supr) {
 			y: 20,
 			width: gameConstants.GAME_WIDTH - 40,
 			height: gameConstants.GAME_HEIGHT - 40,
-			title: 'Default',
+			title: 'Info',
 			closeCB: opts.closeCB ? bind(this, 'hide', opts.closeCB) : false,
 			backCB: opts.backCB ? bind(this, 'hide', opts.backCB) : false
 		});
@@ -88,8 +83,6 @@ exports = Class(DialogBackgroundView, function (supr) {
 		exitButton.on('InputSelect', bind(this, function () {
 			menu.hide();
 		}));
-
-
 	};
 
 	this.setDialog = function(message) {

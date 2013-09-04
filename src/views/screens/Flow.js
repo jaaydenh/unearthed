@@ -6,11 +6,12 @@ import src.views.screens.WorldSelect as WorldSelect;
 import src.views.screens.Game as Game;
 import src.views.screens.Win as Win;
 import src.views.screens.Lose as Lose;
+import src.views.screens.CharacterSelection as CharacterSelection;
 
 import src.util.Data as Data;
 import ui.TextView;
 import src.sounds.soundManager as soundManager;
-
+import src.views.dialogs.StoryView as StoryView;
 import adventuremap.AdventureMap as AdventureMap;
 import src.settings.gridSettings as gridSettings;
 import src.settings.nodeSettings as nodeSettings;
@@ -42,6 +43,10 @@ exports = Class(View, function(supr) {
 			image: "resources/images/backgrounds/main.png"
 		});
 
+		this.story = new StoryView({
+			parent: this
+		})
+
 		this.worlds = new WorldSelect({
 			parent: this
 		});
@@ -57,8 +62,30 @@ exports = Class(View, function(supr) {
 		this.lose = new Lose({
 			parent: this
 		});
-		//this.loadMap();
+
+		this.character = new CharacterSelection({
+			parent: this
+		})
+
+		this.startGame();
 	};
+
+	this.startGame = function() {
+		
+		// check if this is a new game
+		var newGame = Data.get("newGame");
+		if (newGame == 'true') {
+			Data.setItem("newGame", 'false');
+
+			this.story.setDialog("You wake up alone at night in the forest. You have no memory of how you got here. You are carrying nothing except a note that says to find the traveler's portals...");
+			this.removeSubview(this.worlds);
+			this.addSubview(this.story);
+			this.story.show();
+		} else {
+			//this.worlds.select();
+			//this.addSubview(this.worlds);
+		}	
+	}
 
 	this.loadMap = function() {
 		this._adventureMap = new AdventureMap({
@@ -125,6 +152,10 @@ exports = Class(View, function(supr) {
 		}
 		
 	};
+
+	this.showScreen = function(screen) {
+		this.addSubview(this[screen]);
+	}
 
 	this.movePlayer = function(newNodeId) {
 		var adventureMapModel = this._adventureMap.getModel();
@@ -276,6 +307,17 @@ exports = Class(View, function(supr) {
 					game.close();
 					this.unlock();
 				//}));
+			}));
+		} else if (from === "character" && to === "worlds") {
+			animate(this.character)
+			.now({ opacity: 0 }, ANIM_TIME, animate.easeIn)
+			.then(bind(this, function() {
+				//worlds.select();
+
+				this.addSubview(worlds);
+
+				this.removeSubview(this.character);
+				this.unlock();
 			}));
 		} else if (from === "game" && (to === "win" || to === "lose")) {
 			var end = this[to];

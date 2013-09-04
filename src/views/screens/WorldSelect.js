@@ -34,6 +34,8 @@ exports = Class(View, function(supr) {
 	};
 
 	this.buildView = function() {
+		
+
 		this.strip = new View({
 			parent: this,
 			x: (BG_WIDTH - STRIP_WIDTH) / 2,
@@ -148,6 +150,7 @@ exports = Class(View, function(supr) {
 
 		this.addSubscriptions();
 		this.select();
+		//this.flow.removeSubview(this);
 	};
 
 	this.stripperStart = function() {

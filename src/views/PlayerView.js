@@ -32,6 +32,7 @@ exports = Class(ui.View, function (supr) {
 		this.canHandleEvents(true);
 		this._hearts = [];
 
+		this.characterClass = Data.get("characterClass");
 		this.build();
 	};
 
@@ -106,7 +107,7 @@ exports = Class(ui.View, function (supr) {
 		this.gold = new ui.ImageView({
 			parent: this,
 			x: 15,
-			y: 103,
+			y: 53,
 			width: 50,
 			height: 50,
 			image: 'resources/images/gametiles/goldcoin.png'
@@ -115,7 +116,7 @@ exports = Class(ui.View, function (supr) {
 		this.GoldCountText = new ui.TextView({
 			parent: this,
 			x: 50,
-			y: 100,
+			y: 50,
 			width: 100,
 			height: 50,
 			text: Data.getItem("gold"),
@@ -124,6 +125,15 @@ exports = Class(ui.View, function (supr) {
 			strokeColor: 'gold',
 			strokeWidth: 4.5,
 			canHandleEvents: false
+		});
+
+		this.characterImage = new ImageView({
+			parent: this,
+			x: 15,
+			y: 110,
+			width: 150,
+			height: 150,
+			image: "resources/images/characters/" + this.characterClass + ".png"
 		});
 	};
 

@@ -20,8 +20,8 @@ import src.models.RuneModel as RuneModel;
 import src.views.RuneView as RuneView;
 import ui.ParticleEngine as ParticleEngine;
 import src.views.LevelStartView as LevelStartView;
-import src.views.InfoView as InfoView;
-import src.views.dialogs.ChoiceDialogView as ChoiceDialogView;
+import src.views.dialogs.InfoView as InfoView;
+import src.views.dialogs.ChoiceView as ChoiceView;
 
 var currentLayout = [];
 	
@@ -217,8 +217,9 @@ exports = Class(View, function (supr) {
 		this.infoView = new InfoView({
 
 		});
-
-		this.choiceDialog = new ChoiceDialogView({
+		this.addSubview(this.infoView);
+		
+		this.choiceDialog = new ChoiceView({
 			gameView: this
 		});
 		this.addSubview(this.choiceDialog);
@@ -769,7 +770,7 @@ exports = Class(View, function (supr) {
 		} else {
 			this.infoView.setDialog("You require " + this.keysToWin + " key(s) to unlock the traveler's portal");
 			//this.infoView.style.visible = true;
-			this.addSubview(this.infoView);
+			//this.addSubview(this.infoView);
 			this.infoView.show();
 		}
 	}

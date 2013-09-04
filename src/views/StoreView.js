@@ -1,17 +1,11 @@
-import animate;
-
 import ui.View as View;
 import ui.TextView as TextView;
 import ui.ImageView as ImageView;
-
 import menus.constants.menuConstants as menuConstants;
-
 import menus.views.components.BoxBorderView as BoxBorderView;
 import menus.views.components.BoxDialogView as BoxDialogView;
 import menus.views.components.DialogBackgroundView as DialogBackgroundView;
-
 import src.constants.gameConstants as gameConstants;
-import device;
 import src.util.Data as Data;
 
 exports = Class(DialogBackgroundView, function (supr) {
@@ -21,7 +15,8 @@ exports = Class(DialogBackgroundView, function (supr) {
 
 		this.canHandleEvents(true);
 
-		this.game = opts.game;
+		this._game = opts.game;
+		this.style.zIndex = 10000;
 
 		this._dialogView = new BoxDialogView({
 			superview: this._dialogContainerView,
@@ -150,17 +145,21 @@ exports = Class(DialogBackgroundView, function (supr) {
 			if (currentGold >= cost) {
 				// Add life potion to inventory
 				// if add to inventory successful - decrement gold and update gold count text
-				if (this.game._playerModel.addToInventory('life_potion') == true) {
+				if (this._game._playerModel.addToInventory('life_potion') == true) {
 					Data.setItem("gold", currentGold - cost);
 					//this.goldTotalText.setText(currentGold - cost);
-					this.game._playerModel.updateGold();					
+					this._game._playerModel.updateGold();					
 				} else {
-					alert('inventory full');
+					//alert('inventory full');
+					this._game.infoView.setDialog('Inventory full');
+					this._game.infoView.show();
 				}
 				
 			} else {
 				//Data.setItem("gold", 500);
-				alert('Not enough gold to purchase this item');
+				//alert('Not enough gold to purchase this item');
+				this._game.infoView.setDialog('Not enough gold to purchase this item');
+				this._game.infoView.show();
 			}
 					
 		}));

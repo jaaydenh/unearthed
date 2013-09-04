@@ -9,6 +9,16 @@ import src.constants.gameConstants as gameConstants;
 
 var worlds = Data.get("worlds") || {};
 
+src.config.levels.list.forEach(function(name){
+	!(name in worlds) && (worlds[name] = {
+		unlocked: 1,
+		last: -1,
+		currentLevel: 1
+	});
+});
+
+Data.set("worlds", worlds);
+
 var gold = Data.get("gold") || 0;
 Data.setItem("gold", gold);
 
@@ -21,15 +31,11 @@ Data.set("inventory", inventory);
 var specials = Data.get("specials") || [];
 Data.set("specials", specials);
 
-src.config.levels.list.forEach(function(name){
-	!(name in worlds) && (worlds[name] = {
-		unlocked: 1,
-		last: -1,
-		currentLevel: 1
-	});
-});
+var newGame = Data.get("newGame") || 'true';
+Data.set("newGame", newGame);
 
-Data.set("worlds", worlds);
+var characterClass = Data.get("characterClass") || '';
+Data.set("characterClass", characterClass);
 
 var boundsWidth = gameConstants.GAME_WIDTH;
 var boundsHeight = gameConstants.GAME_HEIGHT;

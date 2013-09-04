@@ -64,14 +64,14 @@ exports = Class(DialogBackgroundView, function (supr) {
 		this.settingsArray.push(evilgoldcoin);
 		this.settingsArray.push(whitegoblin);
 
-        this.tileViewPool = new ViewPool({
-            ctor: TrapTileView,
-            initCount: 5,
-            initOpts: {
+        //this.tileViewPool = new ViewPool({
+        //   ctor: TrapTileView,
+        //    initCount: 5,
+        //    initOpts: {
             	//superview: this,
-            	parent: this      
-            }
-        });
+        //    	parent: this      
+        //    }
+        //});
 
 		this.instructionsText = new TextView({
 			superview: this._dialogView,

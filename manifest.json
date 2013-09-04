@@ -36,7 +36,7 @@
 		"appleID": "",
 		"developer": "Joseph Halko",
 		"provision": "partytroll.mobileprovision",
-		"version": "0.1.9",
+		"version": "0.1.10",
 		"icons": {
 			"57": "resources/icons/ios57.png",
 			"72": "resources/icons/ios72.png",

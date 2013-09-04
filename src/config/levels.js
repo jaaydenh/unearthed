@@ -32,7 +32,7 @@ exports["forest"] = [
 	[
 		{
 			levelNumber: 1,
-			isDaytime: true,
+			isDaytime: false,
 			keysToWin: 0,
 			goalTiles: [d],
 			goalText: 'You are lost in the goblin forest! Find the traveler\'s portal.',
@@ -47,12 +47,12 @@ exports["forest"] = [
 		// tile deck, real deck for level 1
 		[r,r,r,r,r,r,r,r,r,d,r,r,r,r,r,r,r,r,r,f,f,f,l,c,c,c,c,c,c,c,c,si,sp,sp,sp,o,o,g,g],
 		// debug tile deck for level 1
-		//[r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,c,c,c,c,c,c,c,c,c,c,c,c,c,c,sp,sp,sp,sp,sp,sp,sp,sp,sp,sp,cv,o,o,g,g,p,d],
+		//[r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,c,c,c,c,c,c,c,c,c,c,c,c,c,c,st,st,st,st,st,st,st,st,st,st,cv,o,o,g,g,p,d],
 		[ca,ca,ca,ca,ca]
 	], [
 		{
 			levelNumber: 2,
-			isDaytime: true,
+			isDaytime: false,
 			keysToWin: 0, 
 			goalTiles: [c,c,c,c,d],
 			goalText: 'The goblins have carelessly dropped gold all over the forest. Collect 4 gold coins',
@@ -69,7 +69,7 @@ exports["forest"] = [
 	], [
 		{
 			levelNumber: 3,
-			isDaytime: true,
+			isDaytime: false,
 			keysToWin: 1,
 			goalTiles: [d],
 			goalText: 'Find and unlock the traveler\'s portal',
@@ -86,7 +86,7 @@ exports["forest"] = [
 	], [
 		{
 			levelNumber: 4,
-			isDaytime: true,
+			isDaytime: false,
 			keysToWin: 0,
 			goalTiles: [dg,d],
 			goalText: 'Your dog has been captured by goblins. Rescue your dog.',
@@ -103,7 +103,7 @@ exports["forest"] = [
 	], [
 		{
 			levelNumber: 5,
-			isDaytime: true,
+			isDaytime: false,
 			keysToWin: 1,
 			goalTiles: [d],
 			goalText: 'The goblins have discovered you in their forest. Find the traveler\'s portal before 3 goblins find you',
