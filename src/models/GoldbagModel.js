@@ -10,13 +10,12 @@ exports = Class(TileModel, function (supr) {
 		opts = merge(opts, {
 			gameMode: opts.gameModel,
 			gameView: opts.gameView,
-			id: 112,
-			description: 'Gold is valuable and get be exchanged for useful items'
+			id: 121,
+			description: 'Bags of gold are worth 10 gold coins'
 		});
 
 		supr(this, 'init', [opts]);
 
-		this._upgradeTile = "goldbag";
 		this._stayVisible = true;
 		this._stealInRow = true;
 		this._tileToSteal = "goldcoin";
@@ -27,6 +26,5 @@ exports = Class(TileModel, function (supr) {
 
 	this.activateTile = function () {
 		
-		this.threeInARow();
 	}
 });

@@ -1,32 +1,29 @@
-import ui.View;
 import src.constants.gameConstants as gameConstants;
 import src.models.TileModel as TileModel;
 import src.sounds.soundManager as soundManager;
+import src.util.Data as Data;
 
 exports = Class(TileModel, function (supr) {
 
 	this.init = function (opts) {
 
 		opts = merge(opts, {
-			gameMode: opts.gameModel,
+			gameModel: opts.gameModel,
 			gameView: opts.gameView,
-			id: 112,
-			description: 'Gold is valuable and get be exchanged for useful items'
-		});
+			id: 119,
+			description: 'An almost entirely uninteresting patch of flowers. However, flowers never grow near goblins'
+		});		  
 
 		supr(this, 'init', [opts]);
-
-		this._upgradeTile = "goldbag";
-		this._stayVisible = true;
-		this._stealInRow = true;
-		this._tileToSteal = "goldcoin";
-		this._stealingTile = "goblin"
-		this._stealInColumn = true;
-		this._valuable = true;
+		
+		this._upgradeTile = "fairy";
+		this._notAdjacent = true;
+		this._notAdjacentTile = 'goblin';
 	};
 
 	this.activateTile = function () {
-		
+
 		this.threeInARow();
 	}
+
 });

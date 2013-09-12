@@ -22,6 +22,8 @@ import ui.ParticleEngine as ParticleEngine;
 import src.views.LevelStartView as LevelStartView;
 import src.views.dialogs.InfoView as InfoView;
 import src.views.dialogs.ChoiceView as ChoiceView;
+import src.models.CampfireRuneModel as CampfireRuneModel;
+import src.models.GreedyRuneModel as GreedyRuneModel;
 
 var currentLayout = [];
 	
@@ -246,17 +248,6 @@ exports = Class(View, function (supr) {
 		return currentLayout[tileNum];
 	}
 
-	this.getTilesWithProperty = function(property, visible) {
-		var tiles = [];
-		currentLayout.forEach(function(tile) {
-			if (tile[property] == true && tile._visible == visible) {
-				tiles.push(tile);
-			}
-		});
-
-		return tiles;
-	}
-
 	this.resetView = function(opts) {
 
 		this.specialsFound = [];
@@ -391,23 +382,33 @@ exports = Class(View, function (supr) {
 
 	this.addRune = function(runeType) {
 
-			var runeModel = new RuneModel( 
+		var runeModel;
+
+		if (runeType == "campfire") {
+			runeModel = new CampfireRuneModel( 
 			{
 				game: this,
 				runeType: runeType
 			});
+		} else if (runeType == "greedy") {
+			runeModel = new GreedyRuneModel( 
+			{
+				game: this,
+				runeType: runeType
+			});
+		}
 
-			var runeView = this.runeViewPool.obtainView();
+		var runeView = this.runeViewPool.obtainView();
 
-			runeView.style.zIndex = 5;
-			runeView._runeType = runeType;
-			runeView.setRuneImage(runeType);
-			runeView.style.visible = true;
-			runeModel.
-				on('Update', bind(runeView, 'onUpdate')).
-				on('Remove', bind(runeView, 'onRemove'));
+		runeView.style.zIndex = 5;
+		runeView._runeType = runeType;
+		runeView.setRuneImage(runeType);
+		runeView.style.visible = true;
+		runeModel.
+			on('Update', bind(runeView, 'onUpdate')).
+			on('Remove', bind(runeView, 'onRemove'));
 
-			runeModel.placeRune();
+		runeModel.placeRune();
 	}
 
 	this.addTileView = function(tileNumber, tileModel) {
@@ -432,6 +433,24 @@ exports = Class(View, function (supr) {
 			on('SetGlow', bind(tileView, 'onSetGlow'));
 
 		this.addSubview(tileView);
+	}
+
+	this.getTilesWithProperty = function(property, visible) {
+		var tiles = [];
+		currentLayout.forEach(function(tile) {
+			if (visible != null) {
+				if (tile[property] == true && tile._visible == visible) {
+					tiles.push(tile);
+				}
+			} else {
+				if (tile[property] == true) {
+					tiles.push(tile);
+				}	
+			}
+
+		});
+
+		return tiles;
 	}
 
 	this.getCreaturesInLayout = function(visible) {
@@ -639,7 +658,7 @@ exports = Class(View, function (supr) {
 		this.addTileView(tile.getTileNumber(), newTileModel);
 	}
 
-	this.swapTile = function(tileToRemove, tileToAdd, activateTile) {
+	this.swapTile = function(tileToRemove, tileToAdd, activateTile, revealTile) {
 		if (tileToRemove.getTileType() == 'goblin') {
 			this._gameStatusModel.removeGoblin();
 		}
@@ -652,6 +671,8 @@ exports = Class(View, function (supr) {
 
 		if (activateTile == true) {
 			tileToAdd.emit('Activate');
+		} else if (revealTile == true) {
+			tileToAdd.emit('Reveal');
 		}
 	}
 

@@ -10,23 +10,14 @@ exports = Class(TileModel, function (supr) {
 		opts = merge(opts, {
 			gameMode: opts.gameModel,
 			gameView: opts.gameView,
-			id: 112,
-			description: 'Gold is valuable and get be exchanged for useful items'
+			id: 125,
+			description: 'Fairies will grant an additional life'
 		});
 
 		supr(this, 'init', [opts]);
-
-		this._upgradeTile = "goldbag";
-		this._stayVisible = true;
-		this._stealInRow = true;
-		this._tileToSteal = "goldcoin";
-		this._stealingTile = "goblin"
-		this._stealInColumn = true;
-		this._valuable = true;
 	};
 
 	this.activateTile = function () {
 		
-		this.threeInARow();
 	}
 });

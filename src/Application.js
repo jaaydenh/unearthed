@@ -37,6 +37,9 @@ Data.set("newGame", newGame);
 var characterClass = Data.get("characterClass") || '';
 Data.set("characterClass", characterClass);
 
+var quests = Data.get("quests") || [];
+Data.set("quests", quests);
+
 var boundsWidth = gameConstants.GAME_WIDTH;
 var boundsHeight = gameConstants.GAME_HEIGHT;
 

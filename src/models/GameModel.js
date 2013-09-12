@@ -16,6 +16,10 @@ import src.models.LostModel as LostModel;
 import src.models.TrapModel as TrapModel;
 import src.models.GoldCoinModel as GoldCoinModel;
 import src.models.SpiderModel as SpiderModel;
+import src.models.FlowersModel as FlowersModel;
+import src.models.FairyModel as FairyModel;
+import src.models.GoldbagModel as GoldbagModel;
+import src.models.MushroomModel as MushroomModel;
 
 exports = Class(Emitter, function (supr) {
 	
@@ -160,6 +164,34 @@ exports = Class(Emitter, function (supr) {
 			});
 		} else if (tileType == 'spider') {
 			tileModel = new SpiderModel( 
+			{
+				gameModel: this,
+				gameView: this._gameView,
+				tileType: tileType
+			});
+		} else if (tileType == 'flowers') {
+			tileModel = new FlowersModel( 
+			{
+				gameModel: this,
+				gameView: this._gameView,
+				tileType: tileType
+			});
+		} else if (tileType == 'fairy') {
+			tileModel = new FairyModel( 
+			{
+				gameModel: this,
+				gameView: this._gameView,
+				tileType: tileType
+			});
+		} else if (tileType == 'goldbag') {
+			tileModel = new GoldbagModel( 
+			{
+				gameModel: this,
+				gameView: this._gameView,
+				tileType: tileType
+			});
+		} else if (tileType == 'poison_mushroom') {
+			tileModel = new MushroomModel( 
 			{
 				gameModel: this,
 				gameView: this._gameView,

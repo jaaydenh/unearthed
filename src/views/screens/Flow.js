@@ -17,6 +17,8 @@ import src.settings.gridSettings as gridSettings;
 import src.settings.nodeSettings as nodeSettings;
 import src.settings.pathSettings as pathSettings;
 import src.settings.tileSettings as tileSettings;
+import src.models.QuestModel as QuestModel;
+import ui.widget.Toast as Toast;
 
 import src.constants.debugConstants as debugConstants;
 import .data;
@@ -67,6 +69,14 @@ exports = Class(View, function(supr) {
 			parent: this
 		})
 
+		this.questInfo = new Toast({
+		    superview: this,
+		    position: 'top',
+		    images: {
+		        top: 'resources/images/toast/top.png'
+		    }
+		});
+
 		this.startGame();
 	};
 
@@ -78,13 +88,44 @@ exports = Class(View, function(supr) {
 			Data.setItem("newGame", 'false');
 
 			this.story.setDialog("You wake up alone at night in the forest. You have no memory of how you got here. You are carrying nothing except a note that says to find the traveler's portals...");
+			this.story.setCallback(this.newGame);
+
 			this.removeSubview(this.worlds);
 			this.addSubview(this.story);
 			this.story.show();
+
 		} else {
 			//this.worlds.select();
 			//this.addSubview(this.worlds);
 		}	
+	}
+
+	this.newGame = function() {
+		var quest = new QuestModel({
+			name: 'Find the traveler\'s portal',
+			description: 'Search the forest to find the lost traveler\'s portals connecting the realm',
+			reward: '10g' 
+		})
+		
+		var quests = Data.get("quests");
+		quests.push(quest);
+		Data.set("quests", quests);
+
+		animate(this).now(
+			bind(this, function () {
+				// this.parent.questInfo.pop('Quest: Find the traveler\'s portal')
+				this.parent.showScreen("character")
+			})
+
+		)
+		.wait(200)
+		.then(
+			bind(this, function () {
+				this.parent.character.showStartingQuest();
+			})
+
+		);
+
 	}
 
 	this.loadMap = function() {

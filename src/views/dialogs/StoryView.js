@@ -22,7 +22,7 @@ exports = Class(DialogBackgroundView, function (supr) {
 		supr(this, 'init', arguments);
 
 		this.style.visible = false;
-
+		this.callback = null;
 		//this.game = opts.game;
 
 		this._dialogView = new BoxDialogView({
@@ -87,13 +87,20 @@ exports = Class(DialogBackgroundView, function (supr) {
 
 		exitButton.on('InputSelect', bind(this, function () {
 			menu.hide();
-			this.parent.showScreen("character");
-		}));
 
+			if (typeof this.callback === "function") {
+    			this.callback();
+   			}
+			//this.parent.showScreen("character");
+		}));
 
 	};
 
 	this.setDialog = function(message) {
 		this.dialogText.setText(message);
+	}
+
+	this.setCallback = function(callback) {
+		this.callback = callback;
 	}
 });

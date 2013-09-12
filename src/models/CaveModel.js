@@ -28,7 +28,7 @@ exports = Class(TileModel, function (supr) {
 
 			var tileModel = this._gameModel.createTileModel(tileType);
 
-			this._gameView.swapTile(this, tileModel, true);
+			this._gameView.swapTile(this, tileModel, true, false);
 		}
 
 		this._activatedCount++;

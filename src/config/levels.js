@@ -22,6 +22,8 @@ var sf = 'singingflower';
 var ct = 'cat';
 var cv = 'cave';
 var sp = 'spider'
+var gr = 'greedy';
+var pm = 'poison_mushroom';
 var x  = null;
 
 exports.list = ["forest", "darkforest"];
@@ -47,8 +49,8 @@ exports["forest"] = [
 		// tile deck, real deck for level 1
 		[r,r,r,r,r,r,r,r,r,d,r,r,r,r,r,r,r,r,r,f,f,f,l,c,c,c,c,c,c,c,c,si,sp,sp,sp,o,o,g,g],
 		// debug tile deck for level 1
-		//[r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,c,c,c,c,c,c,c,c,c,c,c,c,c,c,st,st,st,st,st,st,st,st,st,st,cv,o,o,g,g,p,d],
-		[ca,ca,ca,ca,ca]
+		//[r,r,r,r,r,r,r,r,r,r,r,r,r,pm,pm,pm,pm,pm,pm,pm,c,c,c,c,c,c,c,c,c,c,c,f,f,f,f,f,f,f,f,f,f,f,f,cv,g,p,d],
+		[gr,ca,ca,ca,ca,ca]
 	], [
 		{
 			levelNumber: 2,
@@ -60,12 +62,12 @@ exports["forest"] = [
 			hearts: 3,
 			gridWidth: 6,
 			gridHeight: 5,
-			startingRunes: 3,
+			startingRunes: 4,
 			backgroundImage: 'dirtstonebackground',
 			caveTiles: [o,g,c]
 		},
-		[r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,f,f,f,f,f,g,o,o,o,si,sp,sp,l,l,c,c,c,c,c,c,cv,d],
-		[ca,ca,ca,ca,ca]
+		[r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,f,f,f,f,f,f,f,g,o,o,o,si,sp,sp,l,l,c,c,c,c,c,c,cv,d],
+		[gr,gr,ca,ca,ca,ca,ca,gr,gr]
 	], [
 		{
 			levelNumber: 3,
@@ -82,7 +84,7 @@ exports["forest"] = [
 			caveTiles: [o,g,c]
 		},
 		[r,c,r,c,r,c,r,d,r,r,si,si,sp,sp,sp,f,f,f,c,c,c,c,c,c,o,o,o,g,g,r,r,r,r,r,r,l,cv,k],
-		[ca,ca,ca,ca,ca]
+		[gr,ca,ca,ca,ca,ca]
 	], [
 		{
 			levelNumber: 4,
@@ -99,7 +101,7 @@ exports["forest"] = [
 			caveTiles: [o,g,c]
 		},
 		[c,c,c,c,r,r,r,r,r,r,r,r,r,r,r,r,c,c,c,c,c,c,si,sp,f,f,o,o,o,sf,sf,ca,ca,st,l,l,g,g,cv,d,dg],
-		[ca,ca,ca,ca,ca]
+		[gr,ca,ca,ca,ca,ca]
 	], [
 		{
 			levelNumber: 5,
@@ -116,7 +118,7 @@ exports["forest"] = [
 			caveTiles: [o,g,w,c]
 		},
 		[r,r,r,c,r,c,r,c,r,k,r,r,r,r,r,r,r,si,sp,f,f,c,c,c,c,c,c,g,g,g,g,g,g,o,o,o,ca,ca,l,cv,d],
-		[ca,ca,ca,ca,ca]
+		[gr,ca,ca,ca,ca,ca]
 	], [
 		{
 			levelNumber: 6,
@@ -132,8 +134,8 @@ exports["forest"] = [
 			backgroundImage: 'dirtonlybackground',
 			caveTiles: [o,g,w,c]
 		},
-		[r,c,r,c,r,c,r,k,r,r,k,k,k,r,r,r,r,r,r,r,c,c,c,c,c,c,sp,si,f,f,o,o,o,ca,ca,l,g,g,g,g,cv,d],
-		[ca,ca,ca,ca,ca]
+		[r,c,r,c,r,c,r,k,r,r,k,k,k,r,r,r,r,r,r,r,c,c,c,c,c,c,sp,si,pm,pm,o,o,o,ca,ca,l,g,g,g,g,cv,d],
+		[gr,ca,ca,ca,ca,ca]
 	], [
 		{
 			levelNumber: 7,
@@ -149,8 +151,8 @@ exports["forest"] = [
 			backgroundImage: 'dirtonlybackground',
 			caveTiles: [o,g,w,c]
 		},
-		[c,c,c,c,r,r,r,r,r,r,r,r,rb,r,r,r,r,r,c,c,c,c,c,c,si,f,f,o,o,o,o,tr,sf,sp,sp,sp,l,st,w,g,g,g,cv,d],
-		[ca,ca,ca,ca,ca]
+		[c,c,c,c,r,r,r,r,r,r,r,r,rb,r,r,r,r,r,c,c,c,c,c,c,si,pm,pm,o,o,o,o,tr,sf,sp,sp,sp,l,st,w,g,g,g,cv,d],
+		[gr,ca,ca,ca,ca,ca]
 	], [
 		{
 			levelNumber: 8,
@@ -165,8 +167,8 @@ exports["forest"] = [
 			startingRunes: 3,
 			backgroundImage: 'swampbackground'
 		},
-		[c,c,c,c,r,r,r,r,r,r,r,r,r,r,r,r,k,r,r,c,c,c,c,c,c,c,si,f,o,o,o,o,o,o,sp,sp,l,st,w,tr,g,g,g,s,d],
-		[ca,ca,ca,ca,ca]
+		[c,c,c,c,r,r,r,r,r,r,r,r,r,r,r,r,k,r,r,c,c,c,c,c,c,c,si,pm,o,o,o,o,o,o,sp,sp,l,st,w,tr,g,g,g,s,d],
+		[gr,ca,ca,ca,ca,ca]
 	], [
 		{
 			levelNumber: 9,
@@ -181,8 +183,8 @@ exports["forest"] = [
 			startingRunes: 3,
 			backgroundImage: 'swampbackground'
 		},
-		[c,c,c,c,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,c,c,c,c,c,c,si,si,f,f,o,o,o,sp,sp,sf,l,g,g,g,k,ct,d],
-		[ca,ca,ca,ca,ca]
+		[c,c,c,c,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,c,c,c,c,c,c,f,f,f,f,o,o,o,sp,sp,sf,l,g,g,g,k,ct,d],
+		[gr,ca,ca,ca,ca,ca]
 	], [
 		{
 			levelNumber: 10,
@@ -197,8 +199,8 @@ exports["forest"] = [
 			startingRunes: 3,
 			backgroundImage: 'swampbackground'
 		},
-		[c,c,c,c,r,r,r,r,r,r,r,r,r,r,r,r,c,c,c,c,si,f,f,o,o,o,o,sp,l,st,w,w,w,w,w,w,w,g,g,g,k,k,d],
-		[ca,ca,ca,ca,ca]
+		[c,c,c,c,r,r,r,r,r,r,r,r,r,r,r,r,c,c,c,c,si,pm,pm,o,o,o,o,sp,l,st,w,w,w,w,w,w,w,g,g,g,k,k,d],
+		[gr,ca,ca,ca,ca,ca]
 	]
 ];
 

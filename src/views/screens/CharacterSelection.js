@@ -7,6 +7,7 @@ import src.util.Data as Data;
 import src.views.DiscoveryView as DiscoveryView;
 import src.constants.gameConstants as gameConstants;
 import ui.widget.ButtonView as ButtonView;
+import ui.widget.Toast as Toast;
 
 exports = Class(View, function(supr) {
 
@@ -22,10 +23,28 @@ exports = Class(View, function(supr) {
 		supr(this, "init", [opts]);
 
 		this.designView();
+
+		//this.showStartingQuest();
 	};
 
+	this.showStartingQuest = function() {
+
+
+		this.questInfo.pop('New Quest: Search the forest for the traveler\'s portal');
+	}
+	
 	this.designView = function() {
 		this.flow.removeSubview(this);
+
+		this.questInfo = new Toast({
+		    superview: this,
+		    height: 80,
+		    position: 'top',
+		    images: {
+		        top: 'resources/images/toast/top.png'
+		    },
+		    zIndex: 1000
+		});
 
 		this.background = new ImageView({
 			parent: this,

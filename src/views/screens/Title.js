@@ -32,6 +32,15 @@ exports = Class(View, function (supr) {
 
 		this.style.backgroundColor = 'grey';
 
+		this.background = new ImageView({
+			parent: this,
+			x: 0,
+			y: 0,
+			width: gameConstants.GAME_WIDTH,
+			height: gameConstants.GAME_HEIGHT,
+			image: "resources/images/backgrounds/title.png"
+		});
+
 		this.TitleText = new TextView({
 			parent: this,
 			x: gameConstants.GAME_WIDTH / 2 - 220,

@@ -28,13 +28,15 @@ exports = Class(Emitter, function (supr) {
 		return this._runeNumber;
 	}
 	this.placeRune = function() {
-		switch (this._runeType) {
+		/*switch (this._runeType) {
 			case "campfire":
 				var creatureTiles = [];
 
-				creatureTiles = this._game.getCreaturesInLayout(false);
+				//creatureTiles = this._game.getCreaturesInLayout(false);
+				creatureTiles = this._game.getTilesWithProperty('_creature', false);
 				if (creatureTiles.length == 0) {
-					creatureTiles = this._game.getCreaturesInLayout();
+					//creatureTiles = this._game.getCreaturesInLayout();
+					creatureTiles = this._game.getTilesWithProperty('_creature');
 				}
 				var success = false;
 				if (creatureTiles.length > 0) {
@@ -55,7 +57,7 @@ exports = Class(Emitter, function (supr) {
 					alert('no creatures can be found');
 				}
 			break;
-		}
+		}*/
 
 	}
 });

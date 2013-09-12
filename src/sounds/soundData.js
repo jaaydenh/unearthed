@@ -14,6 +14,11 @@ exports.files = {
       volume: 1,
       background: false
     },
+    evil_laugh: {
+      path: 'effect',
+      volume: 1,
+      background: false
+    },
     splat: {
       path: 'effect',
       volume: 1,

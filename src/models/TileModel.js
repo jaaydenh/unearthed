@@ -151,16 +151,6 @@ exports = Class(ui.View, function (supr) {
 		  this._id = 118;
 		  this._description = 'A warning sign left behind by a previous traveller';
 		break;
-		case "flowers":
-		  this._id = 119;
-		  this._notAdjacent = true;
-		  this._notAdjacentTile = 'goblin';
-		  this._description = 'An almost entirely uninteresting patch of flowers. However, flowers never grow near goblins';
-		break;
-		case "goldbag":
-		  this._id = 121;
-		  this._description = 'Worth 10 gold coins';
-		break;
 		}
 	}
 
@@ -217,7 +207,11 @@ exports = Class(ui.View, function (supr) {
 				}
 			}))
 			// replace current tile with upgraded tile 
-			this.setTileType(this._upgradeTile);
+			//this.setTileType(this._upgradeTile);
+
+			var tileModel = this._gameModel.createTileModel(this._upgradeTile);
+
+			this._gameView.swapTile(this, tileModel, false, true);
 		}
 	}
 	
@@ -265,6 +259,10 @@ exports = Class(ui.View, function (supr) {
 
 	this.activateTile = function () {
 		//this._visible = true;
+
+		if (this._tileType == 'goblin') {
+			soundManager.play('evil_laugh');
+		}
 
 		this.processTileRules();
 	};
