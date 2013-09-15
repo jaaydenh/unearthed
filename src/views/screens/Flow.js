@@ -104,6 +104,8 @@ exports = Class(View, function(supr) {
 		var quest = new QuestModel({
 			name: 'Find the traveler\'s portal',
 			description: 'Search the forest to find the lost traveler\'s portals connecting the realm',
+			findTileObjective: 'door_nokey',
+			acquireTileObjective: '',
 			reward: '10g' 
 		})
 		

@@ -135,6 +135,7 @@ exports = Class(View, function (supr) {
 
 					Data.set("worlds", worlds);
 					Data.setItem("newGame", 'true');
+					Data.set("quests", []);
 		      }
 		    },
 		    title: "Reset",

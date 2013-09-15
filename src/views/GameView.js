@@ -24,6 +24,7 @@ import src.views.dialogs.InfoView as InfoView;
 import src.views.dialogs.ChoiceView as ChoiceView;
 import src.models.CampfireRuneModel as CampfireRuneModel;
 import src.models.GreedyRuneModel as GreedyRuneModel;
+import src.views.QuestView as QuestView;
 
 var currentLayout = [];
 	
@@ -125,13 +126,19 @@ exports = Class(View, function (supr) {
 		});
 		this._gameStatusModel = gameStatusModel;
 
-		this._gameStatusView = new GameStatusView();
+		this._gameStatusView = new GameStatusView({
+			gameView: this
+		});
 
 		this._gameStatusModel.
 			on('UpdateGoblins', bind(this._gameStatusView, 'onUpdateGoblins')).
 			on('UpdateGameTime', bind(this._gameStatusView, 'onUpdateGameTime'));
 
 		this.addSubview(this._gameStatusView);
+
+		this._questView = new QuestView({});
+		this._questView.updateQuests();
+		this.addSubview(this._questView);
 
 		/*this._gui_frame = new ImageView({
 			superview: this,
@@ -227,8 +234,11 @@ exports = Class(View, function (supr) {
 		this.addSubview(this.choiceDialog);
 	};
 
+	this.getQuestView = function() {
+		return this._questView;
+	}
 
-	this.getPlayerModel = function () {
+	this.getPlayerModel = function() {
 		return this._playerModel;
 	};
 

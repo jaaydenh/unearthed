@@ -6,6 +6,8 @@ import src.util.Data as Data;
 import src.sounds.soundManager as soundManager;
 import src.views.screens.Title as Title;
 import src.constants.gameConstants as gameConstants;
+import ui.ImageView;
+import ui.resource.loader as loader;
 
 var worlds = Data.get("worlds") || {};
 
@@ -67,7 +69,7 @@ exports = Class(GC.Application, function () {
 	};
 
 	this.initUI = function() {
-		
+	
 	};
 	
 	this.launchUI = function () {

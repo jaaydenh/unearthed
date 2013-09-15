@@ -6,6 +6,7 @@ import src.util.Data as Data;
 import ui.ScoreView as ScoreView;
 import src.constants.characterConstants as characterConstants;
 import src.constants.gameConstants as gameConstants;
+import ui.widget.ButtonView as ButtonView;
 
 exports = Class(ui.View, function (supr) {
 
@@ -20,6 +21,8 @@ exports = Class(ui.View, function (supr) {
 			x: 0,
 			y: 0
 		});
+
+		this._gameView = opts.gameView;
 
 		supr(this, 'init', [opts]);
 
@@ -70,5 +73,24 @@ exports = Class(ui.View, function (supr) {
 			wrap: false,
 			color: '#FFFFFF'
 		});
+
+
+		this.startButton = new ButtonView({
+		    superview: this,
+		    width: 70,
+		    height: 70,
+		    x: 0,
+		    y: 500,
+		    images: {
+		      up: "resources/images/quest_icon.png",
+		      down: "resources/images/quest_icon.png"
+		    },
+		    on: {
+		      up: bind(this, function () {
+		 
+		      		this._gameView.getQuestView().show();
+				})		      
+		    }
+    	});
 	};
 });
