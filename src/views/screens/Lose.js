@@ -3,21 +3,15 @@ import ui.View as View;
 import ui.ImageView as ImageView;
 import src.util.Data as Data;
 import ui.TextView as TextView;
+import src.constants.gameConstants as gameConstants;
 
 exports = Class(View, function(supr) {
-
-	var BG_WIDTH = 1024,
-		BG_HEIGHT = 576,
-		DRIP_WIDTH = 272,
-		DRIP_HEIGHT = 164,
-		BLOB_WIDTH = 165,
-		BLOB_HEIGHT = 97;
 
 	this.init = function(opts) {
 		opts.x = 0;
 		opts.y = 0;
-		opts.width = BG_WIDTH;
-		opts.height = BG_HEIGHT;
+		opts.width = gameConstants.GAME_WIDTH;
+		opts.height = gameConstants.GAME_HEIGHT;
 		this.flow = opts.parent;
 
 		supr(this, "init", arguments);
@@ -30,19 +24,19 @@ exports = Class(View, function(supr) {
 			parent: this,
 			x: 0,
 			y: 0,
-			width: BG_WIDTH,
-			height: BG_HEIGHT,
+			width: gameConstants.GAME_WIDTH,
+			height: gameConstants.GAME_HEIGHT,
 			image: "resources/images/backgrounds/lose.png"
 		});
 		this.loseText = new TextView({
 			parent: this,
-			x: (BG_WIDTH / 2) - 250,
+			x: (gameConstants.GAME_WIDTH / 2) - 300,
 			y: 60,
-			width: 550,
+			width: 650,
 			height: 200,
 			text: "",
 			fontFamily: "LuckiestGuyRegular",
-			size: 56,
+			size: 66,
 			strokeColor: 'white',
 			strokeWidth: 3,
 			canHandleEvents: false
@@ -50,23 +44,23 @@ exports = Class(View, function(supr) {
 
 		this.menuButton = new ImageView({
 			parent: this,
-			x: (BG_WIDTH / 2) - 105,
+			x: (gameConstants.GAME_WIDTH / 2) - 200,
 			y: 291,
-			width: 70,
-			height: 34,
+			width: 170,
+			height: 70,
 			image: "resources/images/buttons/orange_button.png"
 		});
 		this.menuText = new TextView({
 			parent: this.menuButton,
 			x: 0,
 			y: 0,
-			width: 70,
-			height: 34,
+			width: 170,
+			height: 70,
 			text: "Map",
 			fontFamily: "LuckiestGuyRegular",
-			size: 16,
+			size: 36,
 			strokeColor: 'white',
-			strokeWidth: 1.5,
+			strokeWidth: 3,
 			canHandleEvents: false
 		});
 		this.menuButton.onInputSelect = bind(this, function() {
@@ -79,23 +73,23 @@ exports = Class(View, function(supr) {
 
 		this.replayBtn = new ImageView({
 			parent: this,
-			x: (BG_WIDTH / 2) + 30,
+			x: (gameConstants.GAME_WIDTH / 2) + 30,
 			y: 291,
-			width: 154,
-			height: 64,
-			image: "resources/images/buttons/red_button.png"
+			width: 170,
+			height: 70,
+			image: "resources/images/buttons/orange_button.png"
 		});
 		this.replayText = new TextView({
 			parent: this.replayBtn,
 			x: 0,
 			y: 0,
-			width: 82,
-			height: 34,
+			width: 170,
+			height: 70,
 			text: "Replay",
 			fontFamily: "LuckiestGuyRegular",
-			size: 16,
+			size: 36,
 			strokeColor: 'white',
-			strokeWidth: 1.5,
+			strokeWidth: 3,
 			canHandleEvents: false
 		});
 		this.replayBtn.onInputSelect = bind(this, "replayLevel");
@@ -147,7 +141,5 @@ exports = Class(View, function(supr) {
 	 */
 	this.resetView = function() {
 		this.background.style.opacity = 1;
-
-
 	};
 });

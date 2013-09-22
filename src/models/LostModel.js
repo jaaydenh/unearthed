@@ -26,6 +26,8 @@ exports = Class(TileModel, function (supr) {
 		animate(this).wait(1000)
 		.then(bind(this, function () {
 			this._gameView.replaceTile(this);
+			//this.removeView();
+			//this._gameView.addTileView(newTileModel.getTileNumber(), newTileModel);
 			this._gameView.resetAllTiles();	
 		}))
 	}

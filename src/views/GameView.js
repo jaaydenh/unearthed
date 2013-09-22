@@ -25,6 +25,7 @@ import src.views.dialogs.ChoiceView as ChoiceView;
 import src.models.CampfireRuneModel as CampfireRuneModel;
 import src.models.GreedyRuneModel as GreedyRuneModel;
 import src.views.QuestView as QuestView;
+import src.views.ParallaxView as ParallaxView;
 
 var currentLayout = [];
 	
@@ -158,29 +159,7 @@ exports = Class(View, function (supr) {
 			height: 576
 		});*/
 
-		this.menuBtn = new ImageView({
-			parent: this,
-			x: 0,
-			y: 0,
-			width: 70,
-			height: 45,
-			image: "resources/images/buttons/orange_button.png",
-			zIndex: 1
-		});
-		this.menuBtnText = new TextView({
-			parent: this.menuBtn,
-			x: 0,
-			y: 0,
-			width: 70,
-			height: 45,
-			text: "Menu",
-			fontFamily: "LuckiestGuyRegular",
-			size: 16,
-			strokeColor: 'white',
-			strokeWidth: 1.5,
-			canHandleEvents: false
-		});
-		this.menuBtn.onInputSelect = bind(this, 'menuSelect');
+
 		//this.menuBtn.onInputSelect = bind(this, 'tallyGold');
 		this.goldText = new TextView({
 			parent: this,
@@ -232,6 +211,32 @@ exports = Class(View, function (supr) {
 			gameView: this
 		});
 		this.addSubview(this.choiceDialog);
+
+		this.parallaxView = new ParallaxView({
+			superview: this,
+			x: gameConstants.GAME_STATUS_WIDTH,
+			canHandleEvents: false,
+		 	width: gameConstants.TILE_GRID_WIDTH * gameConstants.TILE_SIZE,
+		 	height: this.style.height,
+		 	zIndex: 9999
+		});
+
+		this.cloudLayer = this.parallaxView.addLayer({
+			distance: 5,
+			populate: function (layer, x) {
+				var size = Utility.choice([1,2,3,4,5]);
+				var v = layer.obtainView(ImageView, {
+					superview: layer,
+					image: "resources/images/cloud" + size + ".png",
+					x: x,
+					y: Utility.randInt(0, 500),
+					opacity: Math.random(),
+					autoSize: true
+				});
+				return Utility.randInt(200, 500);
+			}
+		});
+
 	};
 
 	this.getQuestView = function() {
@@ -246,9 +251,9 @@ exports = Class(View, function (supr) {
 		return this._gameModel;
 	}
 
-	this.menuSelect = function() {
-		this.parent.end('map');
-	};
+	//this.menuSelect = function() {
+	//	this.parent.end('map');
+	//};
 
 	this.mapSelect = function() {
 		this.parent.end('map');
@@ -259,6 +264,9 @@ exports = Class(View, function (supr) {
 	}
 
 	this.resetView = function(opts) {
+
+		this.parallaxView.scrollTo(0, 0);
+		this.parallaxView.clear();
 
 		this.specialsFound = [];
 		this.tileViewPool.releaseAllViews();	
@@ -276,6 +284,7 @@ exports = Class(View, function (supr) {
 		
 		this._multiSelectActive = false;
 		this._goalActive = false;
+		this.defaultTileType = data.defaultTileType;
 		this._specials = Data.getItem("specials");
 		this.tilesSeen = Data.get("tilesSeen");
 		this.goalTiles = data.goalTiles;
@@ -289,7 +298,7 @@ exports = Class(View, function (supr) {
 			this._doorLocked = true;
 		} 
 		this.hearts = data.hearts;
-		//this.gameID = ++gameID;
+		
 		this.won = false;
 		this.lose = false;
 		this.level = opts.level;
@@ -337,12 +346,23 @@ exports = Class(View, function (supr) {
 
 		// Loads the Tile Deck in the game model with the tiles for the level
 		this.tileDeck.forEach(bind(this,function(tileType) {
-
 			this._gameModel.addTileToDeck(tileType);
 		}))
 
-		// iterates through the tile deck for the level and attaches a tileview to each tilemodel and places the tilemodel
-		// into the currentLayout array using the tileNumber as the position in the array
+		this.populateTileViews();
+
+		// Load Starting Runes
+		this.runeDeck = this.level[1];
+		for(var i = 0;i< this.startingRunes;i++) {
+			this.addRune(this.runeDeck[i]);
+		}
+
+		this.checkHintTileStates();
+	};
+
+	// Iterates through the tile deck for the level and attaches a tileview to each tilemodel and places the tilemodel
+	// into the currentLayout array using the tileNumber as the position in the array
+	this.populateTileViews = function() {
 		var pathNum = 1;
 		while (this.tileGridPositions.length > 0) {
 			
@@ -375,20 +395,16 @@ exports = Class(View, function (supr) {
 
 				tileModel.setTileNumber(tileNumber);
 
-				this.addTileView(tileNumber, tileModel);
+				//if (tileModel.getDisplayType() == 'Sprite') {
+
+				//} else {
+				this.addTileView(tileNumber, tileModel);	
+				//}
 
 				currentLayout[tileNumber] = tileModel;
 			}
 		}
-
-		// Load Starting Runes
-		this.runeDeck = this.level[1];
-		for(var i = 0;i< this.startingRunes;i++) {
-			this.addRune(this.runeDeck[i]);
-		}
-
-		this.checkHintTileStates();
-	};
+	}
 
 	this.addRune = function(runeType) {
 
@@ -425,6 +441,7 @@ exports = Class(View, function (supr) {
 		var tileView = this.tileViewPool.obtainView();
 
 		tileView._tileNumber = tileNumber;
+		tileView._defaultTileType = this.defaultTileType;
 		tileView._tileType = tileModel.getTileType();
 		tileView._tileModel = tileModel;
 		tileView._setTilePosition();
@@ -536,7 +553,7 @@ exports = Class(View, function (supr) {
 			width: 100,
 			height: 70,
 			image: "resources/images/buttons/orange_button.png",
-			zIndex: 1
+			zIndex: 10100
 		});
 		this.multiSelectCancelBtnText = new TextView({
 			parent: this.multiSelectCancelBtn,
@@ -559,7 +576,7 @@ exports = Class(View, function (supr) {
 			width: 100,
 			height: 70,
 			image: "resources/images/buttons/orange_button.png",
-			zIndex: 1
+			zIndex: 10100
 		});
 		this.multiSelectConfirmBtnText = new TextView({
 			parent: this.multiSelectConfirmBtn,
@@ -659,13 +676,21 @@ exports = Class(View, function (supr) {
 	this.replaceTile = function(tile) {
 		if (tile.getTileType() == 'goblin') {
 			this._gameStatusModel.removeGoblin();
+			this._gameModel.updateVisibleGoblins(-1);
 		}
 		var newTileModel = this._gameModel.removeTopTileFromDeck();
 		newTileModel.setTileNumber(tile.getTileNumber());	
 		currentLayout[tile.getTileNumber()] = newTileModel;
 
-		tile.removeView();
-		this.addTileView(tile.getTileNumber(), newTileModel);
+		//return newTileModel;
+
+		animate(tile).now(bind(this, function() {
+			tile.removeView();
+		}))
+		.wait(300)
+		.then(bind(this, function() {
+			this.addTileView(tile.getTileNumber(), newTileModel);
+		}))
 	}
 
 	this.swapTile = function(tileToRemove, tileToAdd, activateTile, revealTile) {
@@ -898,7 +923,6 @@ exports = Class(View, function (supr) {
 	}
 
 	this.checkHintTileStates = function() {
-
 		currentLayout.forEach(bind(this,function(tile) {
 			if (tile.getTileType() == 'rock') {
 				var dangerousCount = 0;
@@ -910,15 +934,12 @@ exports = Class(View, function (supr) {
 					}
 				})
 				if (dangerousCount == 1) {
-					//tile.changeImage('rock_1bone');
 					tile.updateImage('rock_1bone');
 					tile.bones = 1;
 				} else if (dangerousCount == 2) {
-					//tile.changeImage('rock_2bones');
 					tile.updateImage('rock_2bones');
 					tile.bones = 2;
 				} else if (dangerousCount >= 3) {
-					//tile.changeImage('rock_3bones');
 					tile.updateImage('rock_3bones');
 					tile.bones = 3
 				}
@@ -1081,6 +1102,78 @@ exports = Class(View, function (supr) {
 				}))
 				return true;
 			}
+		}
+		return false;
+	}
+
+	this.processSteal = function(tileToDiscard, tileToSendToDrawPile) {
+		animate(tileToSendToDrawPile).now(bind(this, function() {
+			tileToSendToDrawPile.moveToTile(tileToDiscard.getTileNumber(), true);
+		}))
+		.wait(500)
+		.then(bind(this, function() {
+			this.replaceTile(tileToDiscard);
+		}))
+
+		this._gameModel.addTileToDeck('goblin');
+		this._gameModel.shuffleDeck();
+	}
+
+	this.stealInColumn = function(tile) {
+		var col = tile.getTileNumber() % this.gridWidth;
+		var tileToDiscard;
+		var tileToSendToDrawPile;
+
+		for (var i = col; i <= this.gridWidth * (this.gridHeight-1) + col; i = i+this.gridWidth) {
+			if (tile.getTileType() == tile._tileToSteal) {
+				if(currentLayout[i].isVisible() == true && currentLayout[i].getTileType() == tile._stealingTile) {
+					tileToDiscard = tile;
+					tileToSendToDrawPile = currentLayout[i];
+					break;
+				}
+			} else if (tile.getTileType() == tile._stealingTile) {
+				if(currentLayout[i].isVisible() == true && currentLayout[i].getTileType() == tile._tileToSteal) {
+					tileToDiscard = currentLayout[i];
+					tileToSendToDrawPile = tile;
+					break;
+				}
+			}
+		}
+
+		if (tileToDiscard != null && tileToSendToDrawPile != null) {
+
+			this.processSteal(tileToDiscard, tileToSendToDrawPile);
+
+			return true;
+		}
+		return false;
+	}
+
+	this.stealInRow = function(tile) {
+		var row = Math.floor(tile.getTileNumber() / this.gridWidth) + 1;
+		var tileToDiscard;
+		var tileToSendToDrawPile;
+
+		for(var i = row * this.gridWidth - this.gridWidth; i < row * this.gridWidth;i++) {
+			if (tile.getTileType() == tile._tileToSteal) {
+				if(currentLayout[i].isVisible() == true && currentLayout[i].getTileType() == tile._stealingTile) {
+					tileToDiscard = tile;
+					tileToSendToDrawPile = currentLayout[i];
+					break;
+				}
+			} else if (tile.getTileType() == tile._stealingTile) {
+				if(currentLayout[i].isVisible() == true && currentLayout[i].getTileType() == tile._tileToSteal) {
+					tileToDiscard = currentLayout[i];
+					tileToSendToDrawPile = tile;
+					break;
+				}
+			}
+		}
+		
+		if (tileToDiscard != null && tileToSendToDrawPile != null) {
+			this.processSteal(tileToDiscard, tileToSendToDrawPile);
+
+			return true;
 		}
 		return false;
 	}
@@ -1359,6 +1452,9 @@ exports = Class(View, function (supr) {
 	}
 
 	this.tick = function(dt) {
+
+		this.cloudLayer.scrollBy(0.7,0,1);
+
 		this.particleEngine.runTick(dt);
 	}
 });
@@ -1413,101 +1509,3 @@ function goblinEatsBerries(berryTile, gameScreen) {
 	}
 	return false;
 }*/
-
-/*
-function processSteal(tileToDiscard, tileToSendToDrawPile, gameScreen) {
-
-		var newTile = replaceTile(tileToSendToDrawPile, gameScreen);
-		var newTile2 = replaceTile(tileToDiscard, gameScreen);
-
-		animate(tileToSendToDrawPile)
-			.wait(500)
-			.then({x: tileToDiscard.style.x, y: tileToDiscard.style.y}, 500, animate.easeIn)
-			.then({opacity: 0}, 500)
-			.then(bind(this, function() {
-				tileToSendToDrawPile.resetTile();
-				gameScreen.removeSubview(tileToSendToDrawPile);
-				gameScreen.addSubview(newTile);
-
-			}))
-
-		animate(tileToDiscard)
-		.wait(500)
-		.then({opacity: 0}, 1000)
-		.then(bind(this, function() {
-
-			gameScreen.removeSubview(tileToDiscard);
-			gameScreen.addSubview(newTile2);
-
-		}))
-		var newGoblin = new Tile('goblin');
-		bindExploreToTile(newGoblin, gameScreen);
-		gameScreen._gameModel.addTileToDeck(newGoblin);
-		gameScreen._gameModel.shuffleDeck();
-}*/
-
-function stealInColumn(tile, gameScreen) {
-	var col = tile.tileNumber % this.gridWidth;
-	var tileToDiscard;
-	var tileToSendToDrawPile;
-
-	for (var i = col; i <= this.gridWidth * (this.gridHeight-1) + col; i= i+this.gridWidth) {
-		if (tile.getTileType() == tile.tileToSteal) {
-			if(currentLayout[i].isVisible() == true && currentLayout[i].getTileType() == tile.stealingTile) {
-				tileToDiscard = tile;
-				tileToSendToDrawPile = currentLayout[i];
-				break;
-			}
-		} else if (tile.getTileType() == tile.stealingTile) {
-			if(currentLayout[i].isVisible() == true && currentLayout[i].getTileType() == tile.tileToSteal) {
-				tileToDiscard = currentLayout[i];
-				tileToSendToDrawPile = tile;
-				break;
-			}
-		}
-	}
-
-	if (tileToDiscard != null && tileToSendToDrawPile != null) {
-
-		processSteal(tileToDiscard, tileToSendToDrawPile, gameScreen);
-
-		return true;
-	}
-	return false;
-}
-
-function stealInRow(tile, gameScreen) {
-	var row = Math.floor(tile.style.tileNumber / this.gridWidth) + 1;
-	var tileToDiscard;
-	var tileToSendToDrawPile;
-
-	for(var i = row * this.gridWidth - this.gridWidth; i < row * this.gridWidth;i++) {
-		if (tile.getTileType() == tile.tileToSteal) {
-			if(currentLayout[i].isVisible() == true && currentLayout[i].getTileType() == tile.stealingTile) {
-				tileToDiscard = tile;
-				tileToSendToDrawPile = currentLayout[i];
-				break;
-			}
-		} else if (tile.getTileType() == tile.stealingTile) {
-			if(currentLayout[i].isVisible() == true && currentLayout[i].getTileType() == tile.tileToSteal) {
-				tileToDiscard = currentLayout[i];
-				tileToSendToDrawPile = tile;
-				break;
-			}
-		}
-	}
-	
-	if (tileToDiscard != null && tileToSendToDrawPile != null) {
-
-		processSteal(tileToDiscard, tileToSendToDrawPile, gameScreen);
-
-		return true;
-	}
-	return false;
-}
-
-function animateToDestination(tile, x, y) {
-	animate(tile).now({x: x, y: y}, 500, animate.easeIn);
-}
-
-

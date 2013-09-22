@@ -1,7 +1,7 @@
 import ui.View;
-import ui.ImageView;
+import ui.ImageView as ImageView;
 import ui.resource.Image as Image;
-import ui.TextView;
+import ui.TextView as TextView;
 import src.util.Data as Data;
 import ui.ScoreView as ScoreView;
 import src.constants.characterConstants as characterConstants;
@@ -19,7 +19,9 @@ exports = Class(ui.View, function (supr) {
 			width:	gameConstants.GAME_STATUS_WIDTH,
 			height: gameConstants.GAME_STATUS_HEIGHT,
 			x: 0,
-			y: 0
+			y: 0,
+			zIndex: 10000,
+			backgroundColor: 'black'
 		});
 
 		this._gameView = opts.gameView;
@@ -41,9 +43,37 @@ exports = Class(ui.View, function (supr) {
 		}
 	}
 
+	this.menuSelect = function() {
+		this._gameView.parent.end('map');
+	};
+
 	this.build = function () {
 
-		this.dayNightStatusView = new ui.ImageView({
+		this.menuBtn = new ImageView({
+			parent: this,
+			x: 0,
+			y: 0,
+			width: 70,
+			height: 45,
+			image: "resources/images/buttons/orange_button.png",
+			zIndex: 1
+		});
+		this.menuBtnText = new TextView({
+			parent: this.menuBtn,
+			x: 0,
+			y: 0,
+			width: 70,
+			height: 45,
+			text: "Menu",
+			fontFamily: "LuckiestGuyRegular",
+			size: 20,
+			strokeColor: 'white',
+			strokeWidth: 1.5,
+			canHandleEvents: false
+		});
+		this.menuBtn.onInputSelect = bind(this, 'menuSelect');
+
+		this.dayNightStatusView = new ImageView({
 			superview: this,
 			image: moon_img,
 			x: 0,
@@ -52,7 +82,7 @@ exports = Class(ui.View, function (supr) {
 			height: 50
 		});
 
-		var goblinStatusView = new ui.ImageView({
+		var goblinStatusView = new ImageView({
 			superview: this,
 			x: 0,
 			y: 170,
@@ -61,7 +91,7 @@ exports = Class(ui.View, function (supr) {
 			image: 'resources/images/goblin_head.png'
 		});
 
-		this.goblinCountView = new ui.TextView({
+		this.goblinCountView = new TextView({
 			superview: this,
 			x: 0,
 			y: 225,

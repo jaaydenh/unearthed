@@ -43,7 +43,8 @@ exports = Class(View, function(supr) {
 		    images: {
 		        top: 'resources/images/toast/top.png'
 		    },
-		    zIndex: 1000
+		    zIndex: 1000,
+		    popDuration: 2000
 		});
 
 		this.background = new ImageView({

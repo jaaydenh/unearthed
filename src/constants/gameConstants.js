@@ -14,7 +14,7 @@ exports.PLAYER_WIDTH = 294;
 
 exports.PLAYER_HEIGHT = 576;
 
-exports.GAME_STATUS_WIDTH = 50;
+exports.GAME_STATUS_WIDTH = 80;
 
 exports.GAME_STATUS_HEIGHT = 576;
 

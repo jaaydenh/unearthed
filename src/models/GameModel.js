@@ -20,6 +20,8 @@ import src.models.FlowersModel as FlowersModel;
 import src.models.FairyModel as FairyModel;
 import src.models.GoldbagModel as GoldbagModel;
 import src.models.MushroomModel as MushroomModel;
+import src.models.GoblinModel as GoblinModel;
+import src.models.FountainModel as FountainModel;
 
 exports = Class(Emitter, function (supr) {
 	
@@ -197,6 +199,20 @@ exports = Class(Emitter, function (supr) {
 				gameView: this._gameView,
 				tileType: tileType
 			});
+		} else if (tileType == 'goblin') {
+			tileModel = new GoblinModel( 
+			{
+				gameModel: this,
+				gameView: this._gameView,
+				tileType: tileType
+			});
+		} else if (tileType == 'fountain') {
+			tileModel = new FountainModel( 
+			{
+				gameModel: this,
+				gameView: this._gameView,
+				tileType: tileType
+			});
 		} else {
 			tileModel = new TileModel( 
 			{
@@ -212,6 +228,10 @@ exports = Class(Emitter, function (supr) {
 	this.addTileToDeck = function(tileType) {
 
 		var tileModel = this.createTileModel(tileType);
+
+		//if (tileNumber != null) {
+		//	tileModel.setTileNumber(tileNumber);
+		//}
 
 		this._tileDeck.push(tileModel);
 	}

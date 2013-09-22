@@ -19,6 +19,9 @@ exports = Class(TileModel, function (supr) {
 		this._upgradeTile = "fairy";
 		this._notAdjacent = true;
 		this._notAdjacentTile = 'goblin';
+
+		//this._displayType = 'SpriteView';
+		//this._animation = 'magic/magic';
 	};
 
 	this.activateTile = function () {

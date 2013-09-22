@@ -24,6 +24,7 @@ var cv = 'cave';
 var sp = 'spider'
 var gr = 'greedy';
 var pm = 'poison_mushroom';
+var fo = 'fountain';
 var x  = null;
 
 exports.list = ["forest", "darkforest"];
@@ -34,6 +35,7 @@ exports["forest"] = [
 	[
 		{
 			levelNumber: 1,
+			defaultTileType: 'tree',
 			isDaytime: false,
 			keysToWin: 0,
 			goalTiles: [d],
@@ -47,13 +49,14 @@ exports["forest"] = [
 			caveTiles: [o,g,w]
 		},
 		// tile deck, real deck for level 1
-		[r,r,r,r,r,r,r,r,r,d,r,r,r,r,r,r,r,r,r,f,f,f,l,c,c,c,c,c,c,c,c,si,sp,sp,sp,o,o,g,g],
+		//[r,r,r,r,r,r,r,r,r,r,r,d,r,r,r,r,r,r,r,r,r,f,f,f,l,c,c,c,c,c,c,c,c,si,sp,sp,sp,o,o,g,g],
 		// debug tile deck for level 1
-		//[r,r,r,r,r,r,r,r,r,r,r,r,r,pm,pm,pm,pm,pm,pm,pm,c,c,c,c,c,c,c,c,c,c,c,f,f,f,f,f,f,f,f,f,f,f,f,cv,g,p,d],
+		[r,r,r,r,r,r,r,r,r,r,r,r,r,fo,fo,fo,fo,fo,fo,fo,fo,c,c,c,c,c,c,c,c,c,c,c,f,f,f,f,f,f,f,f,f,f,f,f,cv,g,p,d],
 		[gr,ca,ca,ca,ca,ca]
 	], [
 		{
 			levelNumber: 2,
+			defaultTileType: 'tree',
 			isDaytime: false,
 			keysToWin: 0, 
 			goalTiles: [c,c,c,c,d],
@@ -66,11 +69,12 @@ exports["forest"] = [
 			backgroundImage: 'dirtstonebackground',
 			caveTiles: [o,g,c]
 		},
-		[r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,f,f,f,f,f,f,f,g,o,o,o,si,sp,sp,l,l,c,c,c,c,c,c,cv,d],
+		[r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,r,f,f,f,f,f,f,f,g,o,o,si,sp,sp,l,l,c,c,c,c,c,c,cv,d],
 		[gr,gr,ca,ca,ca,ca,ca,gr,gr]
 	], [
 		{
 			levelNumber: 3,
+			defaultTileType: 'tree',
 			isDaytime: false,
 			keysToWin: 1,
 			goalTiles: [d],
@@ -83,11 +87,12 @@ exports["forest"] = [
 			backgroundImage: 'dirtstonebackground',
 			caveTiles: [o,g,c]
 		},
-		[r,c,r,c,r,c,r,d,r,r,si,si,sp,sp,sp,f,f,f,c,c,c,c,c,c,o,o,o,g,g,r,r,r,r,r,r,l,cv,k],
+		[r,r,r,r,c,r,c,r,c,r,d,r,r,si,si,sp,sp,sp,f,f,f,c,c,c,c,c,c,o,o,o,g,g,r,r,r,r,r,r,l,cv,k],
 		[gr,ca,ca,ca,ca,ca]
 	], [
 		{
 			levelNumber: 4,
+			defaultTileType: 'tree',
 			isDaytime: false,
 			keysToWin: 0,
 			goalTiles: [dg,d],
@@ -97,7 +102,7 @@ exports["forest"] = [
 			gridWidth: 6,
 			gridHeight: 5,
 			startingRunes: 3,
-			backgroundImage: 'swampbackground',
+			backgroundImage: 'dirtstonebackground',
 			caveTiles: [o,g,c]
 		},
 		[c,c,c,c,r,r,r,r,r,r,r,r,r,r,r,r,c,c,c,c,c,c,si,sp,f,f,o,o,o,sf,sf,ca,ca,st,l,l,g,g,cv,d,dg],
@@ -105,6 +110,7 @@ exports["forest"] = [
 	], [
 		{
 			levelNumber: 5,
+			defaultTileType: 'deadtree',
 			isDaytime: false,
 			keysToWin: 1,
 			goalTiles: [d],
@@ -117,11 +123,12 @@ exports["forest"] = [
 			backgroundImage: 'dirtonlybackground',
 			caveTiles: [o,g,w,c]
 		},
-		[r,r,r,c,r,c,r,c,r,k,r,r,r,r,r,r,r,si,sp,f,f,c,c,c,c,c,c,g,g,g,g,g,g,o,o,o,ca,ca,l,cv,d],
+		[r,r,r,c,r,c,r,c,r,k,r,r,r,r,r,r,r,si,sp,f,f,c,c,c,c,c,c,c,c,g,g,g,g,g,g,o,ca,ca,l,cv,d],
 		[gr,ca,ca,ca,ca,ca]
 	], [
 		{
 			levelNumber: 6,
+			defaultTileType: 'deadtree',
 			isDaytime: true,
 			keysToWin: 3,
 			goalTiles: [d],
@@ -139,6 +146,7 @@ exports["forest"] = [
 	], [
 		{
 			levelNumber: 7,
+			defaultTileType: 'deadtree',
 			isDaytime: true,
 			keysToWin: 0,
 			goalTiles: [d,rb],
@@ -156,6 +164,7 @@ exports["forest"] = [
 	], [
 		{
 			levelNumber: 8,
+			defaultTileType: 'deadtree',
 			isDaytime: false,
 			keysToWin: 1,
 			goalTiles: [d],
@@ -172,6 +181,7 @@ exports["forest"] = [
 	], [
 		{
 			levelNumber: 9,
+			defaultTileType: 'deadtree',
 			isDaytime: false,
 			keysToWin: 1,
 			goalTiles: [d,ct],
@@ -188,6 +198,7 @@ exports["forest"] = [
 	], [
 		{
 			levelNumber: 10,
+			defaultTileType: 'deadtree',
 			isDaytime: true,
 			keysToWin: 2,
 			goalTiles: [d],
@@ -208,6 +219,7 @@ exports["darkforest"] = [
 	[
 		{
 			levelNumber: 1,
+			defaultTileType: 'deadtree',
 			isDaytime: false,
 			keysToWin: 0,
 			goalTiles: [d],
@@ -224,6 +236,7 @@ exports["darkforest"] = [
 	], [
 		{
 			levelNumber: 2,
+			defaultTileType: 'deadtree',
 			isDaytime: false,
 			keysToWin: 0,
 			goalTiles: [d],
@@ -240,6 +253,7 @@ exports["darkforest"] = [
 	], [
 		{
 			levelNumber: 3,
+			defaultTileType: 'deadtree',
 			isDaytime: false,
 			keysToWin: 0,
 			goalTiles: [d],

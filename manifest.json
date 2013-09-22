@@ -11,19 +11,13 @@
 		"landscape"
 	],
 	"description": "Unearthed description",
-	"icon": "resources/images/icons/icon-72.png",
+	"icon": "resources/icons/icon512.png",
 	"splash": {
 		"autoHide": true,
-		"portrait480": "resources/splash/portrait480.png",
-		"portrait960": "resources/splash/portrait960.png",
-		"portrait1024": "resources/splash/portrait1024.png",
-		"portrait1136": "resources/splash/portrait1136.png",
-		"portrait2048": "resources/splash/portrait2048.png",
-		"landscape768": "resources/splash/landscape768.png",
-		"landscape1536": "resources/splash/landscape1536.png"
+		"universal": "resources/splash/universal.png"
 	},
 	"android": {
-		"versionCode": 0.1,
+		"versionCode": 1,
 		"icons": {
 			"36": "resources/icons/android36.png",
 			"48": "resources/icons/android48.png",
@@ -34,9 +28,9 @@
 	"ios": {
 		"bundleID": "com.partytrollstudios.unearthed",
 		"appleID": "",
-		"developer": "Joseph Halko",
+		"developer": "Jaayden Halko",
 		"provision": "partytroll.mobileprovision",
-		"version": "0.1.11",
+		"version": "0.1.12",
 		"icons": {
 			"57": "resources/icons/ios57.png",
 			"72": "resources/icons/ios72.png",
@@ -45,5 +39,5 @@
 			"renderGloss": false
 		}
 	},
-	"sdkVersion": "release-0.1.34"
+	"sdkVersion": "release-0.1.36"
 }

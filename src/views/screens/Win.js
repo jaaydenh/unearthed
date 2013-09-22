@@ -5,34 +5,21 @@ import ui.TextView as TextView;
 import src.config.levels as levels;
 import src.util.Data as Data;
 import src.views.DiscoveryView as DiscoveryView;
+import src.constants.gameConstants as gameConstants;
 
 exports = Class(View, function(supr) {
 
-	var BG_WIDTH = 1024,
-		BG_HEIGHT = 576,
-		BLOB_Y = 50,
-		BLOB_WIDTH = 108,
-		BLOB_HEIGHT = 109,
-		SUN_WIDTH = 450,
-		SUN_HEIGHT = 450,
+	var SUN_WIDTH = 350,
+		SUN_HEIGHT = 350,
 		WIN_Y = 180,
 		WIN_WIDTH = 256,
-		WIN_HEIGHT = 88,
-		NEXT_WIDTH = 154,
-		NEXT_HEIGHT = 64,
-		MENU_WIDTH = 70,
-		MENU_HEIGHT = 34,
-		REPLAY_WIDTH = 82,
-		REPLAY_HEIGHT = 34,
-		MARGINS = 6,
-		SUN_SPIN_RATE = Math.PI / 2,
-		ANIM_TIME = 500;
+		SUN_SPIN_RATE = Math.PI / 2;
 
 	this.init = function(opts) {
 		opts.x = 0;
 		opts.y = 0;
-		opts.width = BG_WIDTH;
-		opts.height = BG_HEIGHT;
+		opts.width = gameConstants.GAME_WIDTH;
+		opts.height = gameConstants.GAME_HEIGHT;
 
 		this.flow = opts.parent;
 		this.worldwin = false;
@@ -50,15 +37,15 @@ exports = Class(View, function(supr) {
 			parent: this,
 			x: 0,
 			y: 0,
-			width: BG_WIDTH,
-			height: BG_HEIGHT,
+			width: gameConstants.GAME_WIDTH,
+			height: gameConstants.GAME_HEIGHT,
 			image: "resources/images/backgrounds/win.png"
 		});
 
 		this.winSun = new ImageView({
 			parent: this,
-			x: (BG_WIDTH - SUN_WIDTH) / 2,
-			y: BLOB_Y - (SUN_HEIGHT - BLOB_HEIGHT) / 2,
+			x: (gameConstants.GAME_WIDTH - SUN_WIDTH) / 2,
+			y: gameConstants.GAME_HEIGHT - SUN_WIDTH - 65,
 			anchorX: SUN_WIDTH / 2,
 			anchorY: SUN_HEIGHT / 2,
 			width: SUN_WIDTH,
@@ -67,19 +54,10 @@ exports = Class(View, function(supr) {
 			image: "resources/images/popups/win-sun.png"
 		});
 
-		this.goldCoin = new ImageView({
-			parent: this,
-			x: (BG_WIDTH - NEXT_WIDTH) / 2,
-			y: BG_HEIGHT,
-			width: 65,
-			height: 65,
-			image: "resources/images/gametiles/goldcoin.png"
-		});
-
 		this.goldFoundText = new TextView({
 			parent: this,
-			x: (BG_WIDTH - NEXT_WIDTH) / 2 + 50,
-			y: BG_HEIGHT,
+			x: gameConstants.GAME_WIDTH / 2 + 20,
+			y: gameConstants.GAME_HEIGHT,
 			width: 100,
 			height: 50,
 			text: "",
@@ -90,15 +68,24 @@ exports = Class(View, function(supr) {
 			canHandleEvents: false
 		});
 
+		this.goldCoin = new ImageView({
+			parent: this,
+			x: gameConstants.GAME_WIDTH / 2 - 45,
+			y: gameConstants.GAME_HEIGHT - 150,
+			width: 85,
+			height: 85,
+			image: "resources/images/gametiles/goldcoin.png"
+		});
+
 		this.winText = new TextView({
 			parent: this,
-			x: BG_WIDTH,
+			x: gameConstants.GAME_WIDTH,
 			y: 60,
-			width: WIN_WIDTH,
-			height: WIN_HEIGHT,
-			text: "You Escaped!",
+			width: 300,
+			height: 100,
+			text: "Level Complete",
 			fontFamily: "LuckiestGuyRegular",
-			size: 36,
+			size: 58,
 			strokeColor: 'white',
 			strokeWidth: 3,
 			canHandleEvents: false
@@ -106,19 +93,19 @@ exports = Class(View, function(supr) {
 
 		this.nextButton = new ImageView({
 			parent: this,
-			x: (BG_WIDTH - NEXT_WIDTH) / 2,
-			y: BG_HEIGHT,
-			width: NEXT_WIDTH,
-			height: NEXT_HEIGHT,
+			x: (gameConstants.GAME_WIDTH - 154) / 2,
+			y: gameConstants.GAME_HEIGHT - 30,
+			width: 170,
+			height: 70,
 			image: "resources/images/buttons/red_button.png"
 		});
 		this.nextText = new TextView({
 			parent: this.nextButton,
 			x: 0,
 			y: 0,
-			width: NEXT_WIDTH,
-			height: NEXT_HEIGHT,
-			text: "Map",
+			width: 170,
+			height: 70,
+			text: "Next",
 			fontFamily: "LuckiestGuyRegular",
 			size: 36,
 			strokeColor: 'white',
@@ -139,23 +126,23 @@ exports = Class(View, function(supr) {
 
 		this.menuButton = new ImageView({
 			parent: this,
-			x: (BG_WIDTH / 2) - 200,
-			y: BG_HEIGHT,
-			width: MENU_WIDTH,
-			height: MENU_HEIGHT,
+			x: (gameConstants.GAME_WIDTH / 2) - 300,
+			y: gameConstants.GAME_HEIGHT - 30,
+			width: 170,
+			height: 70,
 			image: "resources/images/buttons/orange_button.png"
 		});
 		this.menuText = new TextView({
 			parent: this.menuButton,
 			x: 0,
 			y: 0,
-			width: MENU_WIDTH,
-			height: MENU_HEIGHT,
+			width: 170,
+			height: 70,
 			text: "Menu",
 			fontFamily: "LuckiestGuyRegular",
-			size: 16,
+			size: 36,
 			strokeColor: 'white',
-			strokeWidth: 1.5,
+			strokeWidth: 3,
 			canHandleEvents: false
 		});
 		this.menuButton.onInputSelect = bind(this, function() {
@@ -168,23 +155,23 @@ exports = Class(View, function(supr) {
 
 		this.replayButton = new ImageView({
 			parent: this,
-			x: (BG_WIDTH / 2) + 140,
-			y: BG_HEIGHT,
-			width: REPLAY_WIDTH,
-			height: REPLAY_HEIGHT,
-			image: "resources/images/buttons/red_button.png"
+			x: (gameConstants.GAME_WIDTH / 2) + 140,
+			y: gameConstants.GAME_HEIGHT - 30,
+			width: 170,
+			height: 70,
+			image: "resources/images/buttons/orange_button.png"
 		});
 		this.replayText = new TextView({
 			parent: this.replayButton,
 			x: 0,
 			y: 0,
-			width: REPLAY_WIDTH,
-			height: REPLAY_HEIGHT,
+			width: 170,
+			height: 70,
 			text: "Replay",
 			fontFamily: "LuckiestGuyRegular",
-			size: 16,
+			size: 36,
 			strokeColor: 'white',
-			strokeWidth: 1.5,
+			strokeWidth: 3,
 			canHandleEvents: false
 		});
 		this.replayButton.onInputSelect = bind(this, function() {
@@ -211,7 +198,7 @@ exports = Class(View, function(supr) {
 
 		// move in win text
 		animate(this.winText)
-		.now({ x: (BG_WIDTH - WIN_WIDTH) / 2 })
+		.now({ x: (gameConstants.GAME_WIDTH - WIN_WIDTH) / 2 })
 		.then(bind(this, function() {
 			// fade in sun
 			animate(this.winSun).now({ opacity: 1 });
@@ -221,7 +208,7 @@ exports = Class(View, function(supr) {
 		animate(this.nextButton).now({ y: 485 });
 		animate(this.replayButton).now({ y: 490 });
 		animate(this.menuButton).now({ y: 490 });
-		animate(this.goldCoin).now({ y: 300 });
+		animate(this.goldCoin).now({ y: 290 });
 		animate(this.goldFoundText).now({ y: 300 });
 	};
 
@@ -255,12 +242,12 @@ exports = Class(View, function(supr) {
 
 	this.resetView = function() {
 		this.background.style.opacity = 1;
-		this.nextButton.style.y = BG_HEIGHT;
-		this.menuButton.style.y = BG_HEIGHT;
-		this.replayButton.style.y = BG_HEIGHT;
-		this.goldCoin.style.y = BG_HEIGHT;
-		this.goldFoundText.style.y = BG_HEIGHT;
-		this.winText.style.x = BG_WIDTH;
+		this.nextButton.style.y = gameConstants.GAME_HEIGHT;
+		this.menuButton.style.y = gameConstants.GAME_HEIGHT;
+		this.replayButton.style.y = gameConstants.GAME_HEIGHT;
+		this.goldCoin.style.y = gameConstants.GAME_HEIGHT;
+		this.goldFoundText.style.y = gameConstants.GAME_HEIGHT;
+		this.winText.style.x = gameConstants.GAME_WIDTH;
 		this.winText.style.y = WIN_Y;
 		this.winSun.style.opacity = 0;
 	};

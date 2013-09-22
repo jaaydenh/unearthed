@@ -1,5 +1,4 @@
 import ui.View;
-import src.sounds.soundManager as soundManager;
 import src.util.Data as Data;
 import src.constants.gameConstants as gameConstants;
 import event.Emitter as Emitter;
@@ -7,11 +6,6 @@ import animate;
 import src.util.Utility as Utility;
 import src.models.RuneModel as RuneModel;
 import src.views.RuneView as RuneView;
-
-var X_OFFSET = 30;
-var Y_OFFSET = 0;
-var Y_PADDING = 0;
-var X_PADDING = 0;
 
 exports = Class(ui.View, function (supr) {
 
@@ -85,6 +79,8 @@ exports = Class(ui.View, function (supr) {
 		this.emit('UpdateImage', image);
 	}
 
+
+
 	this.setTileRules = function() {
 
 		switch (this._tileType)
@@ -94,7 +90,7 @@ exports = Class(ui.View, function (supr) {
 		  this._adjacent = true;
 		  this._diagonal = true;
 		  this._adjacentTile = 'path';
-		  this._description = 'Find the all the paths along with the travellers portal to exit this area.';
+		  this._description = 'Find the all the paths along with the traveler\'s portal to exit this area.';
 		  break;
 		case "goblinberries":
 		  this._id = 106;	
@@ -110,24 +106,7 @@ exports = Class(ui.View, function (supr) {
 		case "door":
 		  this._id = 110;
 		  this._stayVisible = true;
-		  this._description = 'This is one of the lost travelers portals. Use these to exit this area';
-		  break;
-		case "goblin":
-		  this._id = 111;
-		  this._dangerous = true;
-		  this._stayVisible = true;
-		  this._adjacent = true;
-		  this._adjacentTile = "goblin";
-		  this._shuffleRow = true;
-		  this._shuffleColumn = true;
-		  this._shuffleTrigger = "key";
-		  this._shuffleInitiator = true;
-		  this._stealInRow = true;
-		  this._tileToSteal = "goldcoin";
-		  this._stealingTile = "goblin";
-		  this._stealInColumn = true;
-		  this._creature = true;
-		  this._description = 'Harmless when found alone but if a group of 3 or more is visible, you will be captured and your journey will be over.';
+		  this._description = 'This is one of the lost traveler\'s portals. Use these to exit this area';
 		  break;
 		case "key":
 		  this._id = 113;
@@ -135,11 +114,11 @@ exports = Class(ui.View, function (supr) {
 		  this._shuffleRow = true;
 		  this._shuffleColumn = true;
 		  this._shuffleTrigger = "goblin";
-		  this._description = 'Needed to unlock the travelers portals';
+		  this._description = 'Needed to unlock the traveler\'s portals';
 		  break;
 		case "rock":
 		  this._id = 115;	
-		  this._description = 'Mostly uninteresting but the number of bones can tell how many dangerous creatures are nearby';
+		  this._description = 'Mostly uninteresting but the number of bones next to a rock can tell how many dangerous creatures are nearby';
 		break;
 		case "campfire":
 		  this._id = 117;
@@ -160,6 +139,23 @@ exports = Class(ui.View, function (supr) {
 
 	this.getActivationDecay = function() {
 		return this._activationDecay;
+	}
+
+	this.getDisplayType = function() {
+		
+		if (this._displayType != null) {
+			return this._displayType;
+		}
+
+		return '';
+	}
+
+	this.getAnimation = function() {
+		if (this._animation != null) {
+			return this._animation;
+		}
+
+		return '';
 	}
 
 	this.threeInARow = function() {
@@ -260,10 +256,6 @@ exports = Class(ui.View, function (supr) {
 	this.activateTile = function () {
 		//this._visible = true;
 
-		if (this._tileType == 'goblin') {
-			soundManager.play('evil_laugh');
-		}
-
 		this.processTileRules();
 	};
 	
@@ -309,12 +301,6 @@ exports = Class(ui.View, function (supr) {
 	}
 	
 	this.processTileRules = function() {
-		var didStealOrShuffle = false;
-
-		if (this._tileType == 'goblin') {
-			this._gameModel.updateVisibleGoblins(1);
-		}
-
 		if (this._campfire == true) {
 
 			var runeModel = new RuneModel( 
@@ -344,27 +330,6 @@ exports = Class(ui.View, function (supr) {
 		//if (tile.removeGoblin == true) {
 		//	didStealOrShuffle = goblinEatsBerries(tile, gameScreen);
 		//}	
-		
-		/*if (tile.stealInRow != null && didStealOrShuffle == false) {
-		  	if (tile.stealInRow == true) {
-				didStealOrShuffle = stealInRow(tile, gameScreen);
-			}
-		}
-		if (tile.stealInColumn != null && didStealOrShuffle == false) {
-		  	if (tile.stealInColumn == true) {
-				didStealOrShuffle = stealInColumn(tile, gameScreen);
-			}
-		}*/
-		if (didStealOrShuffle == false) {
-		  	if (this._shuffleRow == true) {
-				didStealOrShuffle = this._gameView.shuffleRow(this);
-			}
-		} 
-		if (didStealOrShuffle == false) {
-		  	if (this._shuffleColumn == true) {
-				didStealOrShuffle = this._gameView.shuffleColumn(this);
-			}
-		} 
 	};
 
 	this.isSleeping = function() {

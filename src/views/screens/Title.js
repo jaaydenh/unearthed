@@ -38,7 +38,7 @@ exports = Class(View, function (supr) {
 			y: 0,
 			width: gameConstants.GAME_WIDTH,
 			height: gameConstants.GAME_HEIGHT,
-			image: "resources/images/backgrounds/title.png"
+			image: "resources/images/backgrounds/title2.png"
 		});
 
 		this.TitleText = new TextView({

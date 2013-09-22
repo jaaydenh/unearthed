@@ -92,7 +92,7 @@ exports = Class(View, function(supr) {
 				y: 0,
 				width: STRIP_WIDTH,
 				height: STRIP_HEIGHT,
-				image: "resources/images/icons/ville_sprite_00" + i + ".png"
+				image: "resources/images/icons/world_00" + i + ".png"
 			});
 
 			icon.name = name;
@@ -210,7 +210,7 @@ exports = Class(View, function(supr) {
 		this.list.forEach(function(icon, i, a) {
 			icon.locked = i !== 0 && worlds[a[i - 1].name].unlocked !== levels[a[i - 1].name].length;		
 			if (icon.locked) {
-				icon.setImage("resources/images/icons/ville_sprite_00" + i + "_locked.png");
+				icon.setImage("resources/images/icons/world_00" + i + "_locked.png");
 			}
 		});
 
@@ -331,7 +331,7 @@ exports = Class(View, function(supr) {
 
 				animations.burst({ parent: this });
 
-				this.list[targetIndex].setImage("resources/images/icons/ville_sprite_00" + targetIndex + ".png");
+				this.list[targetIndex].setImage("resources/images/icons/world_00" + targetIndex + ".png");
 				this.flow.unlock();
 			}));
 		}));

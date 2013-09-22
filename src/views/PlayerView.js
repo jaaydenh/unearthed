@@ -21,9 +21,11 @@ exports = Class(ui.View, function (supr) {
 		opts = merge(opts, {
 			width:	gameConstants.PLAYER_WIDTH,
 			height: gameConstants.PLAYER_HEIGHT,
-			x: 785,
+			x: 765,
 			y: 0,
-			canHandleEvents: true
+			canHandleEvents: true,
+			zIndex: 10000,
+			backgroundColor: 'black'
 		});
 		this.game = opts.game;
 		this._playerModel = opts.playerModel;
@@ -67,7 +69,8 @@ exports = Class(ui.View, function (supr) {
 			});
 		}
 		this.setInventoryItemPos(inventoryItem, item.invPosition);
-		this.game.addSubview(inventoryItem);
+		//this.game.addSubview(inventoryItem);
+		this.addSubview(inventoryItem);
 	}
 
 	this.onUpdateGold = function(gold) {
@@ -142,6 +145,31 @@ exports = Class(ui.View, function (supr) {
 		switch (invPosition)
 		{
 			case 0:
+		      	x = 0;
+			  	y = gameConstants.PLAYER_HEIGHT - 220;
+		 	break;
+			case 1:
+		  		x = 100;
+		  		y = gameConstants.PLAYER_HEIGHT - 220;
+			break;
+			case 2:
+		  	  	x = 0;
+ 				y = gameConstants.PLAYER_HEIGHT - 110;
+			break;
+			case 3:
+		  		x = 100;
+		  		y = gameConstants.PLAYER_HEIGHT - 110;
+			break;
+		}
+		item.style.x = x;
+		item.style.y = y;
+	};
+
+	/*this.setInventoryItemPos = function(item, invPosition) {
+		var x,y;
+		switch (invPosition)
+		{
+			case 0:
 		      	x = gameConstants.GAME_WIDTH - 238;
 			  	y = gameConstants.PLAYER_HEIGHT - 220;
 		 	break;
@@ -160,5 +188,5 @@ exports = Class(ui.View, function (supr) {
 		}
 		item.style.x = x;
 		item.style.y = y;
-	};
+	};*/
 });

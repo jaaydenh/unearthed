@@ -9,8 +9,7 @@ import menus.constants.menuConstants as menuConstants;
 import src.sounds.soundManager as soundManager;
 import ui.ParticleEngine as ParticleEngine;
 import ui.SpriteView as SpriteView;
-
-var default_img;
+import src.util.Utility as Utility;
 
 exports = Class(ui.View, function (supr) {
 
@@ -30,7 +29,6 @@ exports = Class(ui.View, function (supr) {
 
 		supr(this, 'init', [opts]);
 
-		this._defaultTileType = 'tree';
 		this._tileType = '';
 
 		this.build();
@@ -44,7 +42,11 @@ exports = Class(ui.View, function (supr) {
         console.log(this._tileType + ' tile view released!');
     };
 	this.onRemoveView = function () {
-		this._game.releaseView(this, 'tile');
+		animate(this).now({opacity:0}, 300)
+		.then(bind(this, function() {
+			this._game.releaseView(this, 'tile');
+		}))
+		
 	};
 	this.onUpdate = function(tileNumber) {
 		this._tileNumber = tileNumber;
@@ -132,7 +134,9 @@ exports = Class(ui.View, function (supr) {
 		}
 
 		if (peekActive == false) {
-			soundManager.play('step');	
+			if (this._tileModel.isVisible() == false) {					
+				soundManager.play('step');
+			}	
 		}
 		
 		//this._tileview.stopAnimation();
@@ -140,8 +144,50 @@ exports = Class(ui.View, function (supr) {
 
 		var shift = ((gameConstants.TILE_SIZE*1.4)-gameConstants.TILE_SIZE)/2;
 		
-		this._animator.now({ opacity:0,zIndex:20}, 300, animate.easeIn).then(bind(this, function() {
-			this._tileview.setImage(this.tile_img);	
+		if (this._tileModel.isVisible() == false) {	
+			this._revealView.startAnimation('default');
+		}
+
+		this._animator.now({ opacity:0,zIndex:20}, 250, animate.easeIn).then(bind(this, function() {
+			
+			
+			if (this._tileModel.getDisplayType() == 'SpriteView') {
+				this._tileview.style.visible = false;
+				this._animatedTileView.startAnimation('default', {loop: true, randomFrame: false});
+			} else {
+				this._tileview.setImage(this.tile_img);
+			}			
+
+		}))
+		.then({opacity:1},50)
+		//.then({scale:1.5,x: -shift, y: -shift},200, animate.easeOut)
+		//.wait(30)
+		//.then({scale:1, x: 0, y: 0},100, animate.easeIn)
+		.wait(100)
+		.then(
+			bind(this, function() {
+
+				if (peekActive == false) {
+					this.activateTile();
+				} else {
+					this._tileview.style.visible = true;
+					this._tileview.setImage(this.default_img);
+					this._game.peekActive(false);
+					this._game.unlock();
+				}	
+			}
+		));
+
+		/*this._animator.now({ opacity:0,zIndex:20}, 300, animate.easeIn).then(bind(this, function() {
+			this._revealView.startAnimation('default');
+			
+			if (this._tileModel.getDisplayType() == 'SpriteView') {
+				this._tileview.style.visible = false;
+				this._animatedTileView.startAnimation('default', {loop: true, randomFrame: false});
+			} else {
+				this._tileview.style.visible = false;
+				this._tileview.setImage(this.tile_img);
+			}			
 
 		}))
 		.then({opacity:1},50)
@@ -155,18 +201,19 @@ exports = Class(ui.View, function (supr) {
 				if (peekActive == false) {
 					this.activateTile();
 				} else {
-					this._tileview.setImage(default_img);
+					this._tileview.style.visible = true;
+					this._tileview.setImage(this.default_img);
 					this._game.peekActive(false);
 					this._game.unlock();
 				}	
 			}
-		));
+		));*/
 	
 	};
 	this.activateTile = function() {
 		this._tileModel.setActivationDecay(0);
-		this._tileModel.setVisible(true);
 		this._tileModel.activateTile();
+		this._tileModel.setVisible(true);
 		this._tileModel.updateGame();
 		this._game.unlock();
 	};
@@ -222,15 +269,33 @@ exports = Class(ui.View, function (supr) {
 	};
 
 	this.onReset = function() {
-		this._animator.now({ opacity: 0 }, 100, animate.easeIn).then(bind(this, function () {
-			this._tileview.setImage(default_img);
-			this._glowview.style.visible = false;
-		})).then({ opacity: 1}, 300, animate.easeOut);
+		if (this._tileModel.getDisplayType() == 'SpriteView') {
+			this._animatedTileView.stopAnimation();
+			this._tileview.style.visible = true;
+		} else {
+			this._animator.now({ opacity: 0 }, 100, animate.easeIn).then(bind(this, function () {
+				this._tileview.setImage(this.default_img);
+				this._glowview.style.visible = false;
+			})).then({ opacity: 1}, 300, animate.easeOut);
+		}
 	};
 
 	this.setup = function() {
-		this._tileview.setImage(default_img);
+		this.treeNumber = Utility.choice([1,2,3,4]);
+		this.default_img = new Image({url: "resources/images/gametiles/" + this._defaultTileType + this.treeNumber + ".png"});
+
+		this.style.opacity = 1;
+		this._tileview.setImage(this.default_img);
 		this._glowview.style.visible = false;
+
+		if (this._tileModel.getDisplayType() == 'SpriteView') {
+			var opts = {
+				url: "resources/images/gametiles/" + this._tileModel.getAnimation()
+			};
+			this._animatedTileView.resetAllAnimations(opts);
+		} else {
+
+		}
 
 		var tileImage = this._tileType;
 		if (tileImage == 'door') {
@@ -266,12 +331,13 @@ exports = Class(ui.View, function (supr) {
 
 	this.build = function () {
 
-		if (this._tileType == 'disabled') {
-			default_img = new Image({url: "resources/images/gametiles/tree_disabled.png"});
-		} else {
-			default_img = new Image({url: "resources/images/gametiles/" + this._defaultTileType + ".png"});
+		//if (this._tileType == 'disabled') {
+		//	this.default_img = new Image({url: "resources/images/gametiles/tree_disabled.png"});
+		//} else {
+		//	this.default_img = new Image({url: "resources/images/gametiles/" + this._defaultTileType + ".png"});
 			//this.background_img = new Image({url: "resources/images/" + this._background + ".png"});
-		}
+		//}
+
 		this.glow_img = new Image({url: "resources/images/gametiles/glow.png"});
 
 		this._inputview = new ui.View({
@@ -284,13 +350,25 @@ exports = Class(ui.View, function (supr) {
 			zIndex: 50
 		});
 
+		this._revealView = new SpriteView({
+			superview: this._inputview,
+			loop: false,
+			url: 'resources/images/gametiles/reveal/reveal',
+			frameRate:16,
+			x: 0,
+			y: 0,
+			width: gameConstants.TILE_SIZE,
+			height: gameConstants.TILE_SIZE,
+			zIndex: 100
+		});
+
 		this._tileview = new ui.ImageView({
 			superview: this._inputview,
 			//url: 'resources/images/gametiles/tree/tree',
 			//frameRate:16,
 			//defaultAnimation: 'default',
 			//autoStart: true,
-			image: default_img,
+			image: this.default_img,
 			x: 0,
 			y: 0,
 			width: gameConstants.TILE_SIZE,
@@ -298,7 +376,17 @@ exports = Class(ui.View, function (supr) {
 			zIndex: 5
 		});
 
-
+		this._animatedTileView = new SpriteView({
+			superview: this._inputview,
+			//url: 'resources/images/gametiles/tree/tree',
+			//frameRate:16,
+			defaultAnimation: '',
+			x: 0,
+			y: 0,
+			width: gameConstants.TILE_SIZE,
+			height: gameConstants.TILE_SIZE,
+			zIndex: 5
+		});
 
 		this._glowview = new ui.ImageView({
 			superview: this._inputview,
@@ -333,11 +421,11 @@ exports = Class(ui.View, function (supr) {
 			}))
 
 			if (isTileSeen == true) {
-				if (this._tileModel.isVisible() == false) {					
+				//if (this._tileModel.isVisible() == false) {					
 					this._showTile();
-				} else {
-					this.activateTile();
-				}
+				//} else {
+				//	this.activateTile();
+				//}
 			} else {
 				this._game.tilesSeen.push(this._tileModel._id);
 				Data.set("tilesSeen", this._game.tilesSeen);

@@ -16,7 +16,6 @@ exports = Class(TileModel, function (supr) {
 			gameView: opts.gameView,
 			id: 114,
 			description: 'Big, ugly and they hurt',
-
 		});
 
 		supr(this, 'init', [opts]);
